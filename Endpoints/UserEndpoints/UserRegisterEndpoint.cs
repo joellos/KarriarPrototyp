@@ -1,7 +1,8 @@
 ﻿using CC_Karriarpartner.DTOs;
 using CC_Karriarpartner.Services.IUserServices;
+using Microsoft.AspNetCore.Mvc;
 
-namespace CC_Karriarpartner.Endpoints
+namespace CC_Karriarpartner.Endpoints.UserEndpoints
 {
     public class UserRegisterEndpoint
     {
@@ -21,7 +22,7 @@ namespace CC_Karriarpartner.Endpoints
 
                 var result = await userService.RegisterUser(userDto);
 
-                if(result)
+                if (result)
                 {
                     return Results.Ok("User registered successfully");
                 }
@@ -30,6 +31,19 @@ namespace CC_Karriarpartner.Endpoints
                     return Results.BadRequest("Registration failed.");
                 }
             });
+
+            app.MapGet("/api/verify", async ([FromQuery] string email, [FromQuery] string token, IUserService userService) =>
+            {
+                var result = await userService.VerifyEmail(email, token);
+
+                if (result)
+                    return Results.Redirect("/verification-success.html"); // Redirect to a success page
+                else
+                    return Results.BadRequest("Invalid verification link");
+            });
+
+
         }
+
     }
 }

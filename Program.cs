@@ -1,6 +1,6 @@
 
 using CC_Karriarpartner.Data;
-using CC_Karriarpartner.Endpoints;
+using CC_Karriarpartner.Endpoints.UserEndpoints;
 using CC_Karriarpartner.Services.IUserServices;
 using CC_Karriarpartner.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +21,7 @@ namespace CC_Karriarpartner
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IUserService, UserRegisterService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddDbContext<KarriarPartnerDBContext>(options =>
             {
@@ -42,6 +43,7 @@ namespace CC_Karriarpartner
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseStaticFiles();
 
             UserRegisterEndpoint.RegisterUserEndpoints(app);
 

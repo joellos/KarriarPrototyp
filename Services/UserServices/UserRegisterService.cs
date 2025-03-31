@@ -10,9 +10,11 @@ namespace CC_Karriarpartner.Services.UserServices
     public class UserRegisterService : IUserService
     {
         private readonly KarriarPartnerDBContext context;
-        public UserRegisterService(KarriarPartnerDBContext _context)
+        private readonly IEmailService emailService;
+        public UserRegisterService(KarriarPartnerDBContext _context, IEmailService _emailService)
         {
             context = _context;
+            emailService = _emailService;
         }
 
         public async Task<bool> RegisterUser(UserRegistrationDto userRegistrationDto)
@@ -21,6 +23,8 @@ namespace CC_Karriarpartner.Services.UserServices
             {
                 return false; //checks already existing mail
             }
+
+            string verificationToken = GenerateVerification();
 
             string hashedPassword = PasswordHasher.HashPassword(userRegistrationDto.Password);
 
@@ -32,12 +36,35 @@ namespace CC_Karriarpartner.Services.UserServices
                 Phone = userRegistrationDto.UserPhone,
                 Password = hashedPassword,
                 CreatedAt = DateTime.UtcNow,
-                Verified = false
+                Verified = false,
+                EmailVerification = verificationToken
             };
 
             context.Users.Add(user);
             await context.SaveChangesAsync();
+
+            await emailService.SendVerificationEmailAsync(user.Email, verificationToken, user.Name);
             return true;
+        }
+
+        public async Task<bool> VerifyEmail(string email, string token)
+        {
+            var user = await context.Users.SingleOrDefaultAsync(u => u.Email == email && u.EmailVerification == token);
+            
+            if (user == null)
+            {
+                return false;
+            }
+            user.Verified = true;
+            user.EmailVerification = null;
+
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        private string GenerateVerification()
+        {
+            return Guid.NewGuid().ToString("N");
         }
 
 

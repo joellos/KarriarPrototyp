@@ -44,6 +44,7 @@ namespace CC_Karriarpartner.Models
         public string? ProfileImageUrl { get; set; }
 
         public DateTime? LastLogin { get; set; }
+        public string? EmailVerification { get; set; }
 
         public virtual List<UserSubscriptions> Subscriptions { get; set; }
         public virtual List<Purchase> Purchases { get; set; }
