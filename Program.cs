@@ -1,5 +1,8 @@
 
-using KarriarPartner.Data;
+using CC_Karriarpartner.Data;
+using CC_Karriarpartner.Endpoints;
+using CC_Karriarpartner.Services.IUserServices;
+using CC_Karriarpartner.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace CC_Karriarpartner
@@ -17,12 +20,16 @@ namespace CC_Karriarpartner
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<IUserService, UserRegisterService>();
+
             builder.Services.AddDbContext<KarriarPartnerDBContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
             var app = builder.Build();
+
+            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -31,9 +38,12 @@ namespace CC_Karriarpartner
                 app.UseSwaggerUI();
             }
 
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            UserRegisterEndpoint.RegisterUserEndpoints(app);
 
             app.Run();
         }
