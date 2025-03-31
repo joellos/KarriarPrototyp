@@ -1,7 +1,8 @@
-﻿using KarriarPartner.Models;
+﻿using CC_Karriarpartner.Models;
+using CC_Karriarpartner.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace KarriarPartner.Data
+namespace CC_Karriarpartner.Data
 {
     public class KarriarPartnerDBContext : DbContext
     {
