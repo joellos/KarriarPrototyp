@@ -1,0 +1,39 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CC_Karriarpartner.Models
+{
+    public class Course
+    {
+        [Key]
+        public int CourseId { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string Title { get; set; }
+
+        [Required]
+        [MinLength(10)]
+        [MaxLength(2000)]
+        public string Description { get; set; }
+
+        [Required]
+        [MaxLength(10)]
+        public string Category { get; set; }
+
+        [Required]
+        [MaxLength(10)]
+        public string Level { get; set; }
+
+        [Required]
+        [Range(0, 9999.99)] // Om den ingår i premenation?
+        public decimal Price { get; set; }
+
+        public bool Active { get; set; } = true; // True som default??
+        public bool Completed { get; set; } = false;
+
+        public virtual List<CourseVideo> Videos { get; set; }
+        public virtual List<CourseReview> Reviews { get; set; }
+        public virtual List<Certificate> Certificates { get; set; }
+        public virtual List<PurchaseItem> PurchaseItems { get; set; }
+    }
+}

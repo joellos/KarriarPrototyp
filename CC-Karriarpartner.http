@@ -1,0 +1,6 @@
+@CC_Karriarpartner_HostAddress = http://localhost:5228
+
+GET {{CC_Karriarpartner_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
