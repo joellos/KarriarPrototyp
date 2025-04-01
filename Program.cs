@@ -1,6 +1,8 @@
 
 using CC_Karriarpartner.Data;
+using CC_Karriarpartner.Endpoints.LoginEndpoints;
 using CC_Karriarpartner.Endpoints.UserEndpoints;
+using CC_Karriarpartner.Services.AuthServices;
 using CC_Karriarpartner.Services.IUserServices;
 using CC_Karriarpartner.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +22,11 @@ namespace CC_Karriarpartner
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddScoped<IUserService, UserRegisterService>();
-            builder.Services.AddScoped<IEmailService, EmailService>();
+            // Scoped services
+            builder.Services
+                .AddScoped<IUserService, UserRegisterService>()
+                .AddScoped<IEmailService, EmailService>()
+                .AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddDbContext<KarriarPartnerDBContext>(options =>
             {
@@ -45,6 +50,7 @@ namespace CC_Karriarpartner
             app.UseAuthorization();
             app.UseStaticFiles();
 
+            LoginEndpoint.LoginEndpointAsync(app);
             UserRegisterEndpoint.RegisterUserEndpoints(app);
 
             app.Run();
