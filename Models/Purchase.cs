@@ -14,7 +14,6 @@ namespace CC_Karriarpartner.Models
 
         [Required]
         [Range(0, 99999.99)]
-        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
         [Required]
