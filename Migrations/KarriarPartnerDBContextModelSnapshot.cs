@@ -307,12 +307,6 @@ namespace CC_Karriarpartner.Migrations
                     b.Property<string>("ProfileImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("RefreshTokenExpireTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("Verified")
                         .HasColumnType("bit");
 
