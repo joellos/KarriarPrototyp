@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>CC_Karriarpartner</RootNamespace>
+    <UserSecretsId>e399f07b-7af6-4900-8cfe-fc7ece532a9a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
