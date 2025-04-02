@@ -58,6 +58,7 @@ namespace CC_Karriarpartner.Services.UserServices
             user.Verified = true;
             user.EmailVerification = null;
 
+
             await context.SaveChangesAsync();
             return true;
         }
