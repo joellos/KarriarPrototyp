@@ -23,8 +23,8 @@ namespace CC_Karriarpartner.Services.AuthServices
             // Find user by email in the database
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
 
-            // Return null if user was not found
-            if (user is null)
+            // Return null if user was not found or is not verified
+            if (user is null || !user.Verified)
             {
                 return null;
             }
