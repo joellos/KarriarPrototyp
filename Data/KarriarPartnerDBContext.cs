@@ -1,5 +1,4 @@
 ﻿using CC_Karriarpartner.Models;
-using CC_Karriarpartner.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CC_Karriarpartner.Data

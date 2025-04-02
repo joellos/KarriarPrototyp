@@ -149,6 +149,7 @@ namespace CC_Karriarpartner.Services.AuthServices
                 new(ClaimTypes.Name, _user.Name),
                 new(ClaimTypes.Surname, _user.LastName),
                 new(ClaimTypes.Email, _user.Email),
+                new(ClaimTypes.Role, _user.Role)
                 // Add roles here if implementing role-based authorization
             };
 
@@ -169,7 +170,7 @@ namespace CC_Karriarpartner.Services.AuthServices
                 // Claims containing user information
                 claims: claims,
                 // Token expiration time (1 hour to reduce the window of attack if the token is stolen)
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddMinutes(20),
                 // Credentials for signing the token
                 signingCredentials: creds
             );

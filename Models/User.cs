@@ -49,7 +49,7 @@ namespace CC_Karriarpartner.Models
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpireTime { get; set; }
 
-        public string? Role { get; set; }
+        public string Role { get; set; } = string.Empty;
 
         public virtual List<UserSubscriptions> Subscriptions { get; set; }
         public virtual List<Purchase> Purchases { get; set; }
