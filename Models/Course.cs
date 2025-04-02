@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CC_Karriarpartner.Models
 {
@@ -26,6 +26,7 @@ namespace CC_Karriarpartner.Models
         public string Level { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal(18,2)")]
         [Range(0, 9999.99)] // Om den ingår i premenation?
         public decimal Price { get; set; }
 
