@@ -1,10 +1,12 @@
 ﻿using CC_Karriarpartner.DTOs;
+using CC_Karriarpartner.Services.UserServices;
 
 namespace CC_Karriarpartner.Services.IUserServices
 {
     public interface IUserService
     {
-        Task<bool> RegisterUser(UserRegistrationDto userDto);
+        Task<RegistrationResult> RegisterUser(UserRegistrationDto userRegistrationDto);
         Task<bool> VerifyEmail(string email, string token);
+        
     }
 }
