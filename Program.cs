@@ -1,9 +1,12 @@
 
 using CC_Karriarpartner.Data;
+using CC_Karriarpartner.Endpoints.AdminPanelEndpoints;
 using CC_Karriarpartner.Endpoints.LoginEndpoints;
 using CC_Karriarpartner.Endpoints.SearchEndpoints;
 using CC_Karriarpartner.Endpoints.UserEndpoints;
+using CC_Karriarpartner.Services.AdminPanel;
 using CC_Karriarpartner.Services.AuthServices;
+using CC_Karriarpartner.Services.IAdminServices;
 using CC_Karriarpartner.Services.IUserServices;
 using CC_Karriarpartner.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -83,7 +86,8 @@ namespace CC_Karriarpartner
             builder.Services
                 .AddScoped<IUserService, UserRegisterService>()
                 .AddScoped<IEmailService, EmailService>()
-                .AddScoped<IAuthService, AuthService>();
+                .AddScoped<IAuthService, AuthService>()
+                .AddScoped<IAdminPanel, AdminPanelService>();
 
             builder.Services.AddDbContext<KarriarPartnerDBContext>(options =>
             {
@@ -109,6 +113,7 @@ namespace CC_Karriarpartner
             UserRegisterEndpoint.RegisterUserEndpoints(app);
             CourseSearchEndpoint.RegisterCourseSearchEnpoints(app);
             TemplateSearchEndpoint.RegisterTemplateSearchEndpoint(app);
+            GetPurchasesEndpoint.PurchasesEndpoints(app);
 
             app.Run();
         }
