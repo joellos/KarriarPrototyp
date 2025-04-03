@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CC_Karriarpartner.Migrations
 {
     [DbContext(typeof(KarriarPartnerDBContext))]
-    [Migration("20250402085808_AddedRole")]
-    partial class AddedRole
+    [Migration("20250403084442_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -317,6 +317,7 @@ namespace CC_Karriarpartner.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Role")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Verified")
