@@ -3,6 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CC_Karriarpartner.Models
 {
+    public enum PaymentStatus
+    {
+        Väntar,
+        Betald,
+        Misslyckad
+    }
+
     public class GuestPurchase
     {
         [Key]
@@ -20,7 +27,7 @@ namespace CC_Karriarpartner.Models
         public DateTime PurchaseTime { get; set; }
 
         [Required]
-        public string PaymentStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
 
         public Template? Template { get; set; }
 

@@ -4,7 +4,10 @@
     {
         public static void RegisterGuestPurchaseEndpoints(WebApplication app)
         {
-           
+            app.MapPost("/api/guestpurchase", async () =>
+            {
+
+            });
         }
     }
 }
