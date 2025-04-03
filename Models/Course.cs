@@ -13,16 +13,16 @@ namespace CC_Karriarpartner.Models
         public string Title { get; set; }
 
         [Required]
-        [MinLength(10)]
+        [MinLength(5)]
         [MaxLength(2000)]
         public string Description { get; set; }
 
         [Required]
-        [MaxLength(10)]
+        [MaxLength(35)]
         public string Category { get; set; }
 
         [Required]
-        [MaxLength(10)]
+        [MaxLength(35)]
         public string Level { get; set; }
 
         [Required]
