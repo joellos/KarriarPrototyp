@@ -7,7 +7,7 @@ namespace CC_Karriarpartner.Services
         // Use later in the project
         public static bool IsValid(string password, out List<string> errors)
         {
-            errors = new List<string>();
+            errors = [];
 
             // Check minimum length
             if (password.Length < 8)
