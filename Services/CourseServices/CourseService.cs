@@ -20,7 +20,12 @@ namespace CC_Karriarpartner.Services.CourseServices
 
         public async Task<List<CourseDto>> GetAllCourses()
         {
-            var courses = await context.Courses.ToListAsync();
+            var courses = await context.Courses
+                .Include(c => c.Videos)
+                .Include(c => c.Reviews)
+                .Include(c => c.Certificates)
+                .Where(c => c.Active)
+                .ToListAsync();
 
             var courseDtos = courses.Select(course => new CourseDto
             {
@@ -30,11 +35,31 @@ namespace CC_Karriarpartner.Services.CourseServices
                 Category = course.Category,
                 Price = course.Price,
                 Active = course.Active,
-                IsCompleted = course.Completed
+                IsCompleted = course.Completed,
+
+                Videos = course.Videos?.Select(v => new CourseVideoDto
+                {
+                    Title = v.Title,
+                    VideoUrl = v.VideoUrl,
+                    IsActive = v.IsActive
+                }).ToList(),
+
+                Reviews = course.Reviews?.Select(r => new CourseReviewDto
+                {
+                    Comments = r.Comments,
+                    Rating = r.Rating
+                }).ToList(),
+
+                Certificates = course.Certificates?.Select(cert => new CertificateDto
+                {
+                    CertificateUrl = cert.CertificateUrl,
+                    IssuedAt = cert.IssuedAt
+                }).ToList()
             }).ToList();
 
             return courseDtos;
         }
+
 
         public async Task<CourseDto> GetCourseById(int id)
         {
