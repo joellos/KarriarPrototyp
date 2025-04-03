@@ -1,4 +1,4 @@
-﻿using CC_Karriarpartner.DTOs;
+﻿using CC_Karriarpartner.DTOs.TemplateDtos;
 
 namespace CC_Karriarpartner.Services.ITemplateServices
 {

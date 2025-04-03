@@ -1,4 +1,5 @@
 ﻿using CC_Karriarpartner.DTOs;
+using CC_Karriarpartner.DTOs.CourseDtos;
 using CC_Karriarpartner.Services.ICourseServices;
 
 namespace CC_Karriarpartner.Endpoints.CourseEndpoints

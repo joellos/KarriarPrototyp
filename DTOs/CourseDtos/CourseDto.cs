@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CC_Karriarpartner.DTOs
+namespace CC_Karriarpartner.DTOs.CourseDtos
 {
     public class CourseDto
     {
@@ -26,8 +26,8 @@ namespace CC_Karriarpartner.DTOs
         public bool Active { get; set; } = true;
         public bool IsCompleted { get; set; } = false;
         public List<CourseVideoDto>? Videos { get; set; }
-       
-        
+
+
     }
 }
 

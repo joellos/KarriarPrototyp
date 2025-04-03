@@ -1,5 +1,6 @@
 ﻿using CC_Karriarpartner.Data;
 using CC_Karriarpartner.DTOs;
+using CC_Karriarpartner.DTOs.CourseDtos;
 using CC_Karriarpartner.Models;
 using CC_Karriarpartner.Services.ICourseServices;
 using CC_Karriarpartner.Services.ValidationServices;

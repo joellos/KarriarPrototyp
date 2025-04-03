@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CC_Karriarpartner.DTOs
+namespace CC_Karriarpartner.DTOs.TemplateDtos
 {
     public class CreateTemplateDto
     {
