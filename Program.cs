@@ -1,5 +1,6 @@
 
 using CC_Karriarpartner.Data;
+using CC_Karriarpartner.Endpoints.GuestPurchaseEndpoints;
 using CC_Karriarpartner.Endpoints.LoginEndpoints;
 using CC_Karriarpartner.Endpoints.SearchEndpoints;
 using CC_Karriarpartner.Endpoints.UserEndpoints;
@@ -109,6 +110,7 @@ namespace CC_Karriarpartner
             UserRegisterEndpoint.RegisterUserEndpoints(app);
             CourseSearchEndpoint.RegisterCourseSearchEnpoints(app);
             TemplateSearchEndpoint.RegisterTemplateSearchEndpoint(app);
+            GuestPurchaseEndpoints.RegisterGuestPurchaseEndpoints(app);
 
             app.Run();
         }
