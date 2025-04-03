@@ -8,12 +8,12 @@ namespace CC_Karriarpartner.DTOs
 
         [Required]
         [MaxLength(100)]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [Required]
         [MinLength(10)]
         [MaxLength(2000)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
         [MaxLength(10)]
