@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CC_Karriarpartner.Migrations
 {
     [DbContext(typeof(KarriarPartnerDBContext))]
-    [Migration("20250331141947_init")]
+    [Migration("20250403084442_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -276,6 +276,9 @@ namespace CC_Karriarpartner.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("EmailVerification")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");
 
@@ -305,6 +308,16 @@ namespace CC_Karriarpartner.Migrations
                         .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("ProfileImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpireTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Verified")

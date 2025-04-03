@@ -45,6 +45,11 @@ namespace CC_Karriarpartner.Models
 
         public DateTime? LastLogin { get; set; }
         public string? EmailVerification { get; set; }
+        // tokens for authentication
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpireTime { get; set; }
+
+        public string Role { get; set; } = string.Empty;
 
         public virtual List<UserSubscriptions> Subscriptions { get; set; }
         public virtual List<Purchase> Purchases { get; set; }
