@@ -1,9 +1,12 @@
 using CC_Karriarpartner.Data;
 using CC_Karriarpartner.Endpoints.CourseEndpoints;
+using CC_Karriarpartner.Endpoints.TemplateEndpoints;
 using CC_Karriarpartner.Endpoints.UserEndpoints;
 using CC_Karriarpartner.Services.CourseServices;
 using CC_Karriarpartner.Services.ICourseServices;
+using CC_Karriarpartner.Services.ITemplateServices;
 using CC_Karriarpartner.Services.IUserServices;
+using CC_Karriarpartner.Services.TemplateServices;
 using CC_Karriarpartner.Services.UserServices;
 using CC_Karriarpartner.Services.ValidationServices;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +29,7 @@ namespace CC_Karriarpartner
             builder.Services.AddScoped<IUserService, UserRegisterService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<ICourseService, CourseService>();
+            builder.Services.AddScoped<ITemplateService, TemplateService>();
             builder.Services.AddScoped<IValidationService, ValidationService>();
 
             builder.Services.AddDbContext<KarriarPartnerDBContext>(options =>
@@ -49,6 +53,7 @@ namespace CC_Karriarpartner
             // Register endpoints
             UserRegisterEndpoint.RegisterUserEndpoints(app);
             CourseEndpoint.RegisterCourseEndpoints(app);
+            TemplateEndpoint.RegisterTemplateEndpoints(app);
 
             app.Run();
         }
