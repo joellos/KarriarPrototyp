@@ -28,7 +28,6 @@ namespace CC_Karriarpartner.DTOs
         public List<CourseVideoDto>? Videos { get; set; }
         public List<CourseReviewDto>? Reviews { get; set; }
         public List<CertificateDto>? Certificates { get; set; }
-'
-
     }
 }
+
