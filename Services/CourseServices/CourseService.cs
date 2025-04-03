@@ -42,23 +42,12 @@ namespace CC_Karriarpartner.Services.CourseServices
                     Title = v.Title,
                     VideoUrl = v.VideoUrl,
                     IsActive = v.IsActive
-                }).ToList(),
-
-                Reviews = course.Reviews?.Select(r => new CourseReviewDto
-                {
-                    Comments = r.Comments,
-                    Rating = r.Rating
-                }).ToList(),
-
-                Certificates = course.Certificates?.Select(cert => new CertificateDto
-                {
-                    CertificateUrl = cert.CertificateUrl,
-                    IssuedAt = cert.IssuedAt
                 }).ToList()
-            }).ToList();
+            }).ToList(); 
 
             return courseDtos;
         }
+
 
 
         public async Task<CourseDto> GetCourseById(int id)
@@ -133,6 +122,12 @@ namespace CC_Karriarpartner.Services.CourseServices
             course.Price = courseDto.Price;
             course.Active = courseDto.Active;
             course.Completed = courseDto.IsCompleted;
+            course.Videos = courseDto.Videos?.Select(v => new CourseVideo
+            {
+                Title = v.Title,
+                VideoUrl = v.VideoUrl,
+                IsActive = v.IsActive
+            }).ToList();
 
             try
             {

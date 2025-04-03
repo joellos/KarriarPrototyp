@@ -26,8 +26,8 @@ namespace CC_Karriarpartner.DTOs
         public bool Active { get; set; } = true;
         public bool IsCompleted { get; set; } = false;
         public List<CourseVideoDto>? Videos { get; set; }
-        public List<CourseReviewDto>? Reviews { get; set; }
-        public List<CertificateDto>? Certificates { get; set; }
+       
+        
     }
 }
 

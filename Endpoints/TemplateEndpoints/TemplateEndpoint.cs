@@ -48,9 +48,20 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
             .WithOpenApi();
 
             // POST create template
-            templateGroup.MapPost("/", async (TemplateDto templateDto, ITemplateService templateService) =>
+            // POST create template
+            templateGroup.MapPost("/", async (CreateTemplateDto templateDto, ITemplateService templateService) =>
             {
-                var (success, createdTemplate, errorMessages) = await templateService.CreateTemplate(templateDto);
+                var (success, createdTemplate, errorMessages) = await templateService.CreateTemplate(new CreateTemplateDto
+                {
+                    Id = templateDto.Id,
+                    Title = templateDto.Title,
+                    Description = templateDto.Description,
+                    Category = templateDto.Category,
+                    Level = templateDto.Level,
+                    Price = templateDto.Price,
+                    Active = templateDto.Active,
+                    PdfUrl = templateDto.PdfUrl
+                });
 
                 if (!success)
                 {
@@ -61,6 +72,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
             })
             .WithName("CreateTemplate")
             .WithOpenApi();
+
 
             // PUT update template
             templateGroup.MapPut("/{id}", async (int id, TemplateDto templateDto, ITemplateService templateService) =>

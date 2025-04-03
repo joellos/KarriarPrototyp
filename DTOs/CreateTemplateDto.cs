@@ -2,9 +2,10 @@
 
 namespace CC_Karriarpartner.DTOs
 {
-    public class TemplateDto
+    public class CreateTemplateDto
     {
 
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Titel är obligatoriskt")]
         [MaxLength(100, ErrorMessage = "Titel får inte överstiga 100 tecken")]
