@@ -164,6 +164,52 @@ namespace CC_Karriarpartner.Services.CourseServices
             return (true, new List<string>());
         }
 
+        public async Task<bool> AddVideoAsync(CreateCourseVideoDto dto)
+        {
+            var video = new CourseVideo
+            {
+                CourseId_FK = dto.CourseId,
+                Title = dto.Title,
+                VideoUrl = dto.VideoUrl,
+                IsActive = dto.IsActive
+            };
+
+            context.CourseVideos.Add(video);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> AddReviewAsync(CreateCourseReviewDto dto)
+        {
+            var review = new CourseReview
+            {
+                CourseId_FK = dto.CourseId,
+                UserId_FK = dto.UserId,
+                Comments = dto.Comments,
+                Rating = dto.Rating
+            };
+
+            context.CourseReviews.Add(review);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> AddCertificateAsync(CreateCertificateDto dto)
+        {
+            var cert = new Certificate
+            {
+                CourseId_FK = dto.CourseId,
+                UserId_FK = dto.UserId,
+                CertificateUrl = dto.CertificateUrl,
+                IssuedAt = dto.IssuedAt
+            };
+
+            context.Certificates.Add(cert);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+
         private bool CourseExists(int id)
         {
             return context.Courses.Any(c => c.CourseId == id);

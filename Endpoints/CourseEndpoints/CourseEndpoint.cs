@@ -21,9 +21,7 @@ namespace CC_Karriarpartner.Endpoints.CourseEndpoints
                 {
                     return Results.Problem(ex.Message);
                 }
-            })
-            .WithName("GetAllCourses")
-            .WithOpenApi();
+            });
 
             // GET course by id
             courseGroup.MapGet("/{id}", async (int id, ICourseService courseService) =>
@@ -41,9 +39,7 @@ namespace CC_Karriarpartner.Endpoints.CourseEndpoints
                 {
                     return Results.Problem(ex.Message);
                 }
-            })
-            .WithName("GetCourseById")
-            .WithOpenApi();
+            });
 
             // POST create course
             courseGroup.MapPost("/", async (CourseDto courseDto, ICourseService courseService) =>
@@ -56,9 +52,7 @@ namespace CC_Karriarpartner.Endpoints.CourseEndpoints
                 }
 
                 return Results.Created($"/api/courses/{createdCourse.Id}", createdCourse);
-            })
-            .WithName("CreateCourse")
-            .WithOpenApi();
+            });
 
             // PUT update course
             courseGroup.MapPut("/{id}", async (int id, CourseDto courseDto, ICourseService courseService) =>
@@ -76,9 +70,8 @@ namespace CC_Karriarpartner.Endpoints.CourseEndpoints
                 }
 
                 return Results.NoContent();
-            })
-            .WithName("UpdateCourse")
-            .WithOpenApi();
+            });
+
 
             // DELETE course
             courseGroup.MapDelete("/{id}", async (int id, ICourseService courseService) =>
@@ -91,9 +84,29 @@ namespace CC_Karriarpartner.Endpoints.CourseEndpoints
                 }
 
                 return Results.NoContent();
-            })
-            .WithName("DeleteCourse")
-            .WithOpenApi();
+            });
+
+            // POST - Add Course Video
+            courseGroup.MapPost("/{id}/videos", async (CreateCourseVideoDto dto, ICourseService service) =>
+            {
+                var result = await service.AddVideoAsync(dto);
+                return result ? Results.Ok() : Results.BadRequest();
+            });
+
+            // POST - Add Course Review
+            courseGroup.MapPost("/{id}/reviews", async (CreateCourseReviewDto dto, ICourseService service) =>
+            {
+                var result = await service.AddReviewAsync(dto);
+                return result ? Results.Ok() : Results.BadRequest();
+            });
+
+            // POST - Add Certificate
+            courseGroup.MapPost("/{id}/certificates", async (CreateCertificateDto dto, ICourseService service) =>
+            {
+                var result = await service.AddCertificateAsync(dto);
+                return result ? Results.Ok() : Results.BadRequest();
+            });
+
         }
     }
 }
