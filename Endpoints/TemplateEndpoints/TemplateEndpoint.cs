@@ -22,9 +22,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
                 {
                     return Results.Problem(ex.Message);
                 }
-            })
-            .WithName("GetAllTemplates")
-            .WithOpenApi();
+            });
 
             // GET template by id
             templateGroup.MapGet("/{id}", async (int id, ITemplateService templateService) =>
@@ -42,9 +40,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
                 {
                     return Results.Problem(ex.Message);
                 }
-            })
-            .WithName("GetTemplateById")
-            .WithOpenApi();
+            });
 
             // POST create template
             // POST create template
@@ -68,9 +64,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
                 }
 
                 return Results.Created($"/api/templates/{createdTemplate.Id}", createdTemplate);
-            })
-            .WithName("CreateTemplate")
-            .WithOpenApi();
+            });
 
 
             // PUT update template
@@ -104,9 +98,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
                 }
 
                 return Results.NoContent();
-            })
-            .WithName("DeleteTemplate")
-            .WithOpenApi();
+            });
         }
     }
 }

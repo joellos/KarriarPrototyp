@@ -66,8 +66,8 @@ namespace CC_Karriarpartner.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(35)
+                        .HasColumnType("nvarchar(35)");
 
                     b.Property<bool>("Completed")
                         .HasColumnType("bit");
@@ -79,8 +79,8 @@ namespace CC_Karriarpartner.Migrations
 
                     b.Property<string>("Level")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(35)
+                        .HasColumnType("nvarchar(35)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -310,7 +310,7 @@ namespace CC_Karriarpartner.Migrations
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("RefreshTokenExpireTime")
+                    b.Property<DateTime>("RefreshTokenExpireTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Role")
