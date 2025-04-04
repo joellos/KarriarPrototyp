@@ -1,14 +1,21 @@
 
 using CC_Karriarpartner.Data;
 using CC_Karriarpartner.Endpoints.AdminPanelEndpoints;
+using CC_Karriarpartner.Endpoints.CourseEndpoints;
 using CC_Karriarpartner.Endpoints.LoginEndpoints;
 using CC_Karriarpartner.Endpoints.SearchEndpoints;
+using CC_Karriarpartner.Endpoints.TemplateEndpoints;
 using CC_Karriarpartner.Endpoints.UserEndpoints;
 using CC_Karriarpartner.Services.AdminPanel;
 using CC_Karriarpartner.Services.AuthServices;
+using CC_Karriarpartner.Services.CourseServices;
 using CC_Karriarpartner.Services.IAdminServices;
+using CC_Karriarpartner.Services.ICourseServices;
+using CC_Karriarpartner.Services.ITemplateServices;
 using CC_Karriarpartner.Services.IUserServices;
+using CC_Karriarpartner.Services.TemplateServices;
 using CC_Karriarpartner.Services.UserServices;
+using CC_Karriarpartner.Services.ValidationServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -27,9 +34,15 @@ namespace CC_Karriarpartner
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; // Rmove later
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; // Remove later
             }).AddJwtBearer(options =>
             {
+                var token = builder.Configuration.GetValue<string>("Appsettings:Token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    throw new ArgumentNullException("Appsettings:Token", "Token value is missing in configuration.");
+                }
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -37,13 +50,12 @@ namespace CC_Karriarpartner
                     ValidateAudience = true,
                     ValidAudience = builder.Configuration["Appsettings:Audience"],
                     ValidateLifetime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Appsettings:Token")!)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(token)),
                     ValidateIssuerSigningKey = true
                 };
             });
 
-            builder.Services.AddAuthorizationBuilder().AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin")); 
+            builder.Services.AddAuthorizationBuilder().AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
@@ -67,19 +79,19 @@ namespace CC_Karriarpartner
                 });
 
                 options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+        {
+            {
+                new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
+                    Reference = new Microsoft.OpenApi.Models.OpenApiReference
                     {
-                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-                        {
-                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                            {
-                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
+                        Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                        Id = "Bearer"
                     }
-                });
+                },
+                Array.Empty<string>()
+            }
+        });
             });
 
             // Scoped services
@@ -87,7 +99,11 @@ namespace CC_Karriarpartner
                 .AddScoped<IUserService, UserRegisterService>()
                 .AddScoped<IEmailService, EmailService>()
                 .AddScoped<IAuthService, AuthService>()
-                .AddScoped<IAdminPanel, AdminPanelService>();
+                .AddScoped<IAdminPanel, AdminPanelService>()
+                .AddScoped<ITemplateService, TemplateService>()
+                .AddScoped<ICourseService, CourseService>()
+                .AddScoped<IValidationService, ValidationService>();
+
 
             builder.Services.AddDbContext<KarriarPartnerDBContext>(options =>
             {
@@ -103,7 +119,6 @@ namespace CC_Karriarpartner
                 app.UseSwaggerUI();
             }
 
-            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
@@ -114,8 +129,11 @@ namespace CC_Karriarpartner
             CourseSearchEndpoint.RegisterCourseSearchEnpoints(app);
             TemplateSearchEndpoint.RegisterTemplateSearchEndpoint(app);
             GetPurchasesEndpoint.PurchasesEndpoints(app);
+            CourseEndpoint.RegisterCourseEndpoints(app);
+            TemplateEndpoint.RegisterTemplateEndpoints(app);
 
             app.Run();
         }
+
     }
 }
