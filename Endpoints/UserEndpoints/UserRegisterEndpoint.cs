@@ -32,6 +32,7 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                     RegistrationResult.Error => Results.StatusCode(500),
                     _ => Results.StatusCode(500)
                 };
+
             });
 
             app.MapGet("/api/verify", async ([FromQuery] string email, [FromQuery] string token, IUserService userService) =>
