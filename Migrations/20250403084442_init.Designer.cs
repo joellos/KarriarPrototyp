@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CC_Karriarpartner.Migrations
 {
     [DbContext(typeof(KarriarPartnerDBContext))]
-    [Migration("20250402102828_RemovedNullablefromROle")]
-    partial class RemovedNullablefromROle
+    [Migration("20250403084442_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

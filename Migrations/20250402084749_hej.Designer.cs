@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CC_Karriarpartner.Migrations
 {
     [DbContext(typeof(KarriarPartnerDBContext))]
-    [Migration("20250331183015_userUpdated")]
-    partial class userUpdated
+    [Migration("20250402084749_hej")]
+    partial class hej
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -309,6 +309,12 @@ namespace CC_Karriarpartner.Migrations
 
                     b.Property<string>("ProfileImageUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpireTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Verified")
                         .HasColumnType("bit");

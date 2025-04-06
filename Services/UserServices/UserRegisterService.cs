@@ -17,46 +17,68 @@ namespace CC_Karriarpartner.Services.UserServices
             emailService = _emailService;
         }
 
-        public async Task<bool> RegisterUser(UserRegistrationDto userRegistrationDto)
+        public async Task<RegistrationResult> RegisterUser(UserRegistrationDto userRegistrationDto)
         {
+            if (!IsValidEmail(userRegistrationDto.UserEmail))
+            {
+                return RegistrationResult.InvalidEmail;
+            }
+
             if (await context.Users.AnyAsync(u => u.Email == userRegistrationDto.UserEmail))
             {
-                return false; //checks already existing mail
+                return RegistrationResult.EmailAlreadyExists; //checks already existing mail
+            }
+
+
+            if (!IsPasswordValid(userRegistrationDto.Password))
+            {
+                return RegistrationResult.InvalidPassword; // Password doesn't meet the requirements
             }
 
             string verificationToken = GenerateVerification();
 
             string hashedPassword = PasswordHasher.HashPassword(userRegistrationDto.Password);
 
-            var user = new User
+            try
             {
-                Name = userRegistrationDto.UserName,
-                LastName = userRegistrationDto.UserLastName,
-                Email = userRegistrationDto.UserEmail,
-                Phone = userRegistrationDto.UserPhone,
-                Password = hashedPassword,
-                CreatedAt = DateTime.UtcNow,
-                Verified = false,
-                EmailVerification = verificationToken
-            };
+                var user = new User
+                {
+                    Name = userRegistrationDto.UserName,
+                    LastName = userRegistrationDto.UserLastName,
+                    Email = userRegistrationDto.UserEmail,
+                    Phone = userRegistrationDto.UserPhone,
+                    Password = hashedPassword,
+                    CreatedAt = DateTime.UtcNow,
+                    Verified = false,
+                    EmailVerification = verificationToken
+                };
 
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
+                context.Users.Add(user);
+                await context.SaveChangesAsync();
 
-            await emailService.SendVerificationEmailAsync(user.Email, verificationToken, user.Name);
-            return true;
+                await emailService.SendVerificationEmailAsync(user.Email, verificationToken, user.Name);
+                return RegistrationResult.Success;
+
+            }
+            catch
+            {
+                return RegistrationResult.Error;
+
+            }
+
         }
 
         public async Task<bool> VerifyEmail(string email, string token)
         {
             var user = await context.Users.SingleOrDefaultAsync(u => u.Email == email && u.EmailVerification == token);
-            
+
             if (user == null)
             {
                 return false;
             }
             user.Verified = true;
             user.EmailVerification = null;
+
 
             await context.SaveChangesAsync();
             return true;
@@ -66,7 +88,31 @@ namespace CC_Karriarpartner.Services.UserServices
         {
             return Guid.NewGuid().ToString("N");
         }
+        private static bool IsPasswordValid(string password)
+        {
+            bool result = password.Length >= 8 &&
+                          password.Any(char.IsLower) &&
+                          password.Any(char.IsUpper) &&
+                          password.Any(char.IsDigit) &&
+                         password.Any(ch => !char.IsLetterOrDigit(ch));
+            return result;
+        }
+        private bool IsValidEmail(string email)//validates email
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);//validates the email with help of .net 
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
 
 
+        }
     }
 }

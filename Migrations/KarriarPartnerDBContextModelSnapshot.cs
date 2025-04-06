@@ -310,7 +310,7 @@ namespace CC_Karriarpartner.Migrations
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("RefreshTokenExpireTime")
+                    b.Property<DateTime?>("RefreshTokenExpireTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Role")

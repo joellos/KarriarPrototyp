@@ -1,5 +1,6 @@
 ﻿using CC_Karriarpartner.DTOs;
 using CC_Karriarpartner.Services.IUserServices;
+using CC_Karriarpartner.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CC_Karriarpartner.Endpoints.UserEndpoints
@@ -22,14 +23,16 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
 
                 var result = await userService.RegisterUser(userDto);
 
-                if (result)
+                return result switch //switch that returns differents resuluts error or success
                 {
-                    return Results.Ok("User registered successfully");
-                }
-                else
-                {
-                    return Results.BadRequest("Registration failed.");
-                }
+                    RegistrationResult.Success => Results.Ok("User registered successfully"),
+                    RegistrationResult.EmailAlreadyExists => Results.BadRequest("Email already exists"),
+                    RegistrationResult.InvalidPassword => Results.BadRequest("Password does not meet requirements (must be at least 8 characters and include uppercase, lowercase, numbers, and special characters)"),
+                    RegistrationResult.InvalidEmail => Results.BadRequest("Invalid email format"),
+                    RegistrationResult.Error => Results.StatusCode(500),
+                    _ => Results.StatusCode(500)
+                };
+
             });
 
             app.MapGet("/api/verify", async ([FromQuery] string email, [FromQuery] string token, IUserService userService) =>
