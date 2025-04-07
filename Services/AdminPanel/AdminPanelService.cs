@@ -15,9 +15,17 @@ namespace CC_Karriarpartner.Services.AdminPanel
             context = _context;
         }
 
-        public async Task<List<PurchaseResponseDto>> GetAllPurchases()
+        public async Task<(List<PurchaseResponseDto> Purchases, int TotalCount)> GetAllPurchases(int page = 1, int pageSize = 10)//adminPanel endrpoint to get all pruchases 
         {
+            page = Math.Max(1, page); //max to avoid errors from user, it will take first page if input 0 
+            pageSize = Math.Max(1, pageSize);
+
+            var totalCount = await context.Purchases.CountAsync();
+
             var purchases = await context.Purchases
+                .OrderByDescending(p => p.BuyDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                   .Include(p => p.User)
                   .Include(p => p.PurchaseItems)
                   .ThenInclude(pi => pi.Course)
@@ -47,7 +55,7 @@ namespace CC_Karriarpartner.Services.AdminPanel
                 })
                 .ToList()
             }).ToList();
-            return result;
+            return (result, totalCount);
         }
     }
 
