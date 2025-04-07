@@ -4,6 +4,7 @@ using CC_Karriarpartner.Services.IUserServices;
 using CC_Karriarpartner.Services;
 using Microsoft.EntityFrameworkCore;
 using CC_Karriarpartner.Models;
+using CC_Karriarpartner.DTOs.UserDtos;
 
 namespace CC_Karriarpartner.Services.UserServices
 {
@@ -16,6 +17,34 @@ namespace CC_Karriarpartner.Services.UserServices
             context = _context;
             emailService = _emailService;
         }
+
+        public async Task<List<UserPurchaseHistoryDto>> GetPurchaseHistory(int userId) //users history purchase
+        {
+            var purchases = await context.Purchases
+                .Where(p => p.User.UserId == userId)
+                .OrderByDescending(p => p.BuyDate)
+                .Include(p => p.PurchaseItems)
+                .ThenInclude(pi => pi.Course)
+                .ToListAsync();
+            var result = purchases.Select(p => new UserPurchaseHistoryDto
+            {
+                PurchaseId = p.PurchaseId,
+                PurchaseDate = p.BuyDate,
+                Price = p.Price,
+                Items = p.PurchaseItems
+              .Where(pi => pi.Course != null) 
+              .Select(pi => new UserPurchaseItemDto
+              {
+                  ItemId = pi.PurchaseItemId,
+                  ProductName = pi.Course.Title,
+                  ProductDescription = pi.Course.Description
+              }).ToList()
+            }).ToList();
+
+            return result;
+        }
+
+
 
         public async Task<RegistrationResult> RegisterUser(UserRegistrationDto userRegistrationDto)
         {
