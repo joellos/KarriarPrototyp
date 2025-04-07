@@ -1,5 +1,5 @@
 ﻿using CC_Karriarpartner.Data;
-using CC_Karriarpartner.DTOs;
+using CC_Karriarpartner.DTOs.TemplateDtos;
 using CC_Karriarpartner.Models;
 using CC_Karriarpartner.Services.ITemplateServices;
 using CC_Karriarpartner.Services.ValidationServices;
@@ -24,7 +24,7 @@ namespace CC_Karriarpartner.Services.TemplateServices
 
             var templateDtos = templates.Select(template => new TemplateDto
             {
-                Id = template.TemplateId,
+                
                 Title = template.Title,
                 Description = template.Description,
                 Category = template.Category,
@@ -37,7 +37,7 @@ namespace CC_Karriarpartner.Services.TemplateServices
             return templateDtos;
         }
 
-        public async Task<TemplateDto> GetTemplateById(int id)
+        public async Task<CreateTemplateDto> GetTemplateById(int id)
         {
             var template = await context.Templates.FirstOrDefaultAsync(t => t.TemplateId == id);
 
@@ -46,7 +46,7 @@ namespace CC_Karriarpartner.Services.TemplateServices
                 throw new KeyNotFoundException("Mallen existerar ej.");
             }
 
-            var templateDto = new TemplateDto
+            var templateDto = new CreateTemplateDto
             {
                 Id = template.TemplateId,
                 Title = template.Title,
@@ -61,7 +61,7 @@ namespace CC_Karriarpartner.Services.TemplateServices
             return templateDto;
         }
 
-        public async Task<(bool Success, TemplateDto? TemplateDto, List<string> ErrorMessages)> CreateTemplate(TemplateDto templateDto)
+        public async Task<(bool Success, CreateTemplateDto? TemplateDto, List<string> ErrorMessages)> CreateTemplate(CreateTemplateDto templateDto)
         {
             // Validate the templateDto
             var (isValid, errorMessages) = validationService.ValidateModel(templateDto);

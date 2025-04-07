@@ -1,5 +1,6 @@
 ﻿using CC_Karriarpartner.Data;
 using CC_Karriarpartner.DTOs;
+using CC_Karriarpartner.DTOs.CourseDtos;
 using CC_Karriarpartner.Models;
 using CC_Karriarpartner.Services.ICourseServices;
 using CC_Karriarpartner.Services.ValidationServices;
@@ -42,23 +43,12 @@ namespace CC_Karriarpartner.Services.CourseServices
                     Title = v.Title,
                     VideoUrl = v.VideoUrl,
                     IsActive = v.IsActive
-                }).ToList(),
-
-                Reviews = course.Reviews?.Select(r => new CourseReviewDto
-                {
-                    Comments = r.Comments,
-                    Rating = r.Rating
-                }).ToList(),
-
-                Certificates = course.Certificates?.Select(cert => new CertificateDto
-                {
-                    CertificateUrl = cert.CertificateUrl,
-                    IssuedAt = cert.IssuedAt
                 }).ToList()
-            }).ToList();
+            }).ToList(); 
 
             return courseDtos;
         }
+
 
 
         public async Task<CourseDto> GetCourseById(int id)
@@ -133,6 +123,12 @@ namespace CC_Karriarpartner.Services.CourseServices
             course.Price = courseDto.Price;
             course.Active = courseDto.Active;
             course.Completed = courseDto.IsCompleted;
+            course.Videos = courseDto.Videos?.Select(v => new CourseVideo
+            {
+                Title = v.Title,
+                VideoUrl = v.VideoUrl,
+                IsActive = v.IsActive
+            }).ToList();
 
             try
             {
@@ -163,6 +159,52 @@ namespace CC_Karriarpartner.Services.CourseServices
 
             return (true, new List<string>());
         }
+
+        public async Task<bool> AddVideoAsync(CreateCourseVideoDto dto)
+        {
+            var video = new CourseVideo
+            {
+                CourseId_FK = dto.CourseId,
+                Title = dto.Title,
+                VideoUrl = dto.VideoUrl,
+                IsActive = dto.IsActive
+            };
+
+            context.CourseVideos.Add(video);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> AddReviewAsync(CreateCourseReviewDto dto)
+        {
+            var review = new CourseReview
+            {
+                CourseId_FK = dto.CourseId,
+                UserId_FK = dto.UserId,
+                Comments = dto.Comments,
+                Rating = dto.Rating
+            };
+
+            context.CourseReviews.Add(review);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> AddCertificateAsync(CreateCertificateDto dto)
+        {
+            var cert = new Certificate
+            {
+                CourseId_FK = dto.CourseId,
+                UserId_FK = dto.UserId,
+                CertificateUrl = dto.CertificateUrl,
+                IssuedAt = dto.IssuedAt
+            };
+
+            context.Certificates.Add(cert);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
 
         private bool CourseExists(int id)
         {
