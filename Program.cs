@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.RateLimiting;
 
 namespace CC_Karriarpartner
 {
@@ -94,6 +95,22 @@ namespace CC_Karriarpartner
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // So 
+            builder.Services.AddRateLimiter(option =>
+            {
+                option.AddPolicy("login", httpcontext => RateLimitPartition.GetFixedWindowLimiter( // Rate limiting for login endpoint
+                    partitionKey: httpcontext.Connection.RemoteIpAddress?.ToString() ?? "UNKNOWN",
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        AutoReplenishment = true, // Enable auto-replenishment so that the rate limiter will automatically replenish the limit
+                        PermitLimit = 5, // Allow 5 requests
+                        QueueLimit = 0, // No queue limit so requests are rejected if limit is reached and give a 429 code
+                        Window = TimeSpan.FromMinutes(10) // Only 5 requests per 10 minutes
+
+                    }));
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -107,6 +124,7 @@ namespace CC_Karriarpartner
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseRateLimiter();
             app.UseStaticFiles();
 
             LoginEndpoint.LoginEndpointAsync(app);
