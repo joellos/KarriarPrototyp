@@ -1,4 +1,5 @@
 ﻿using CC_Karriarpartner.DTOs;
+using CC_Karriarpartner.DTOs.UserDtos;
 using CC_Karriarpartner.Services.UserServices;
 
 namespace CC_Karriarpartner.Services.IUserServices
@@ -7,6 +8,7 @@ namespace CC_Karriarpartner.Services.IUserServices
     {
         Task<RegistrationResult> RegisterUser(UserRegistrationDto userRegistrationDto);
         Task<bool> VerifyEmail(string email, string token);
+        Task<List<UserPurchaseHistoryDto>> GetPurchaseHistory(int userId);
         
     }
 }

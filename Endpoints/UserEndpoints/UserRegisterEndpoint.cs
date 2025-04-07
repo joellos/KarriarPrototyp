@@ -2,6 +2,8 @@
 using CC_Karriarpartner.Services.IUserServices;
 using CC_Karriarpartner.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CC_Karriarpartner.Endpoints.UserEndpoints
 {
@@ -45,6 +47,23 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                     return Results.BadRequest("Invalid verification link");
             });
 
+            app.MapGet("/api/user/purchases", [Authorize] async (ClaimsPrincipal user, IUserService userService) =>
+            {
+                var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    return Results.BadRequest("Could not identify user");
+                }
+
+                var purchaseHistory = await userService.GetPurchaseHistory(userId);
+                if (purchaseHistory.Count == 0)
+                {
+                    return Results.NoContent();
+                }
+
+                return Results.Ok(purchaseHistory);
+            });
 
         }
 
