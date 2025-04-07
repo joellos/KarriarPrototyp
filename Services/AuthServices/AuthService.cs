@@ -120,7 +120,7 @@ namespace CC_Karriarpartner.Services.AuthServices
                 issuer: configuration.GetValue<string>("Appsettings:Issuer"),
                 audience: configuration.GetValue<string>("Appsettings:Audience"),
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(20),
+                expires: DateTime.UtcNow.AddMinutes(10),
                 signingCredentials: creds
             );
 
