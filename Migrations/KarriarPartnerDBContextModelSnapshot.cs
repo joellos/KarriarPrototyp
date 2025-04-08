@@ -157,6 +157,34 @@ namespace CC_Karriarpartner.Migrations
                     b.ToTable("CourseVideos");
                 });
 
+            modelBuilder.Entity("CC_Karriarpartner.Models.GuestPurchase", b =>
+                {
+                    b.Property<int>("GuestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GuestId"));
+
+                    b.Property<string>("GuestEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PurchaseTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TemplateId_Fk")
+                        .HasColumnType("int");
+
+                    b.HasKey("GuestId");
+
+                    b.HasIndex("TemplateId_Fk");
+
+                    b.ToTable("GuestPurchases");
+                });
+
             modelBuilder.Entity("CC_Karriarpartner.Models.Purchase", b =>
                 {
                     b.Property<int>("PurchaseId")
@@ -406,6 +434,17 @@ namespace CC_Karriarpartner.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("CC_Karriarpartner.Models.GuestPurchase", b =>
+                {
+                    b.HasOne("CC_Karriarpartner.Models.Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId_Fk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Template");
                 });
 
             modelBuilder.Entity("CC_Karriarpartner.Models.Purchase", b =>
