@@ -2,7 +2,8 @@
 {
     public class TokenResponseDto
     {
-        public required string AccessToken { get; set; }
-        public required string RefreshToken { get; set; }
+        // What you get when you login
+        public required string AccessToken { get; set; } // JWT token
+        public required string RefreshToken { get; set; } // Refresh token for getting new access token
     }
 }

@@ -26,7 +26,7 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                 {
                     return Results.BadRequest("Login failed.");
                 }
-            }); 
+            }).RequireRateLimiting("login");
             // Test endpoints
             app.MapGet("/AuthAdmin", () =>
             {
