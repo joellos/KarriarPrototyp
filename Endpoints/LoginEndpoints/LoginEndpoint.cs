@@ -26,18 +26,21 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                 {
                     return Results.BadRequest("Login failed.");
                 }
-            }).RequireRateLimiting("login");
+            }).WithTags("Login and Register")
+                .RequireRateLimiting("login");
             // Test endpoints
             app.MapGet("/AuthAdmin", () =>
             {
                 return Results.Ok("Auth");
 
-            }).RequireAuthorization("AdminPolicy");
+            }).WithTags("Login and Register")
+                .RequireAuthorization("AdminPolicy");
             app.MapGet("/Auth", () =>
             {
                 return Results.Ok("Logged in");
 
-            }).RequireAuthorization();
+            }).RequireAuthorization()
+            .WithTags("Login and Register");
 
         }
     }

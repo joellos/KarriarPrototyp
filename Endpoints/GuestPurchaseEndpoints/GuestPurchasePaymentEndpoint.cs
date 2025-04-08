@@ -24,7 +24,7 @@ namespace CC_Karriarpartner.Endpoints.GuestPurchaseEndpoints
 
                 return Results.Ok($"Betalningen gick genom! Mallen skickas nu till: {purchase.GuestEmail}");
 
-            });
+            }).WithTags("Payments");
         }
     }
 }

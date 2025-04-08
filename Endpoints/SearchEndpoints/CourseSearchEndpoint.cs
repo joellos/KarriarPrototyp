@@ -58,7 +58,7 @@ namespace CC_Karriarpartner.Endpoints.SearchEndpoints
 
                 return Results.Ok(courses);
 
-            });
+            }).WithTags("Course");
         }
     }
 }

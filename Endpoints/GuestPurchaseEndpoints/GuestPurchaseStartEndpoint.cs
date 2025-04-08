@@ -32,7 +32,7 @@ namespace CC_Karriarpartner.Endpoints.GuestPurchaseEndpoints
                     GuestPurchaseId = newPurchase.GuestId
                 });
 
-            });
+            }).WithTags("Payments");
         }
     }
 }

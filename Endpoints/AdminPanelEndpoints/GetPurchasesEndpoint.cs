@@ -39,7 +39,8 @@ namespace CC_Karriarpartner.Endpoints.AdminPanelEndpoints
                 })
                 .RequireAuthorization("AdminPolicy")
                 .WithName("GetALlPurchasesAdmin")
-                .WithDescription("Endpoint to get all purchases made on website, only works with admin auth");
+                .WithDescription("Endpoint to get all purchases made on website, only works with admin auth")
+                .WithTags("Admin Panel");
         }
     }
 }

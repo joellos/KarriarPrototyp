@@ -36,7 +36,7 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                     _ => Results.StatusCode(500)
                 };
 
-            });
+            }).WithTags("Login and Register");
 
             app.MapGet("/api/verify", async ([FromQuery] string email, [FromQuery] string token, IUserService userService) =>
             {
@@ -46,7 +46,7 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                     return Results.Redirect("/verification-success.html"); // Redirect to a success page
                 else
                     return Results.BadRequest("Invalid verification link");
-            });
+            }).WithTags("Login and Register");
 
             app.MapGet("/api/user/purchases", [Authorize] async (ClaimsPrincipal user, IUserService userService) =>
             {
@@ -64,7 +64,7 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                 }
 
                 return Results.Ok(purchaseHistory);
-            });
+            }).WithTags("User Profile");
 
             app.MapGet("/api/user/profile", [Authorize] async (ClaimsPrincipal user, IUserService service) =>
             {

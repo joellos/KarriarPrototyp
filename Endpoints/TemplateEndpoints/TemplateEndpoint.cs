@@ -24,6 +24,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
                 }
             })
             .WithName("GetAllTemplates")
+            .WithTags("Templates")
             .WithOpenApi();
 
             // GET template by id
@@ -44,6 +45,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
                 }
             })
             .WithName("GetTemplateById")
+            .WithTags("Templates")
             .WithOpenApi();
 
             // POST create template
@@ -70,6 +72,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
                 return Results.Created($"/api/templates/{createdTemplate.Id}", createdTemplate);
             })
             .WithName("CreateTemplate")
+            .WithTags("Admin Panel")
             .WithOpenApi();
 
 
@@ -91,6 +94,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
                 return Results.NoContent();
             })
             .WithName("UpdateTemplate")
+            .WithTags("Admin Panel")
             .WithOpenApi();
 
             // DELETE template
@@ -106,6 +110,7 @@ namespace CC_Karriarpartner.Endpoints.TemplateEndpoints
                 return Results.NoContent();
             })
             .WithName("DeleteTemplate")
+            .WithTags("Admin Panel")
             .WithOpenApi();
         }
     }
