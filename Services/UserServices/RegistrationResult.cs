@@ -6,6 +6,8 @@
         EmailAlreadyExists,
         InvalidEmail,
         InvalidPassword,
-        Error
+        Error,
+        InvalidName,
+        InvalidInput
     }
 }

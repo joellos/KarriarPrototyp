@@ -9,6 +9,7 @@ namespace CC_Karriarpartner.Services.IUserServices
         Task<RegistrationResult> RegisterUser(UserRegistrationDto userRegistrationDto);
         Task<bool> VerifyEmail(string email, string token);
         Task<List<UserPurchaseHistoryDto>> GetPurchaseHistory(int userId);
-        
+        Task<UserProfileDto> GetUserProfile(int userId);
+        Task<RegistrationResult> UpdateUserProfile(int userId, UpdateProfileDto profileDto);
     }
 }

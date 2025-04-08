@@ -4,6 +4,7 @@ using CC_Karriarpartner.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using CC_Karriarpartner.DTOs.UserDtos;
 
 namespace CC_Karriarpartner.Endpoints.UserEndpoints
 {
@@ -65,6 +66,45 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                 return Results.Ok(purchaseHistory);
             });
 
+            app.MapGet("/api/user/profile", [Authorize] async (ClaimsPrincipal user, IUserService service) =>
+            {
+                var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    return Results.BadRequest("Could not identify user");
+                }
+                var profile = await service.GetUserProfile(userId);
+                if (profile == null)
+                    return Results.NotFound("User not found");
+
+                return Results.Ok(profile);
+
+            }).WithName("GetUserProfile")
+            .WithDescription("Get specefic user profile")
+            .WithTags("User Profile");
+
+            app.MapPut("/api/user/profile", [Authorize] async (ClaimsPrincipal user, IUserService service, UpdateProfileDto profileDto) =>
+            {
+                var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    return Results.BadRequest("Could not identify user");
+                }
+                var result = await service.UpdateUserProfile(userId, profileDto);
+
+                return result switch
+                {
+                    RegistrationResult.Success => Results.Ok(new { message = "Profile updated successfully" }),
+                    RegistrationResult.EmailAlreadyExists => Results.BadRequest("Email already in use"),
+                    RegistrationResult.InvalidEmail => Results.BadRequest("Invalid email format"),
+                    RegistrationResult.InvalidName => Results.BadRequest("Name and last name are required"),
+                    RegistrationResult.InvalidInput => Results.BadRequest("Name, last name, and email are required fields and cannot be empty"),
+                    _ => Results.Problem("Failed to update profile")
+                };
+            })
+                .WithDisplayName("UpdateUserProfile")
+                .WithDescription("Update personal information as email, name etc for a specific logged in user ")
+                .WithTags("User Profile");
         }
 
     }
