@@ -1,4 +1,3 @@
-
 using CC_Karriarpartner.Data;
 using CC_Karriarpartner.Endpoints.AdminPanelEndpoints;
 using CC_Karriarpartner.Endpoints.GuestPurchaseEndpoints;
@@ -173,6 +172,9 @@ namespace CC_Karriarpartner
             CourseSearchEndpoint.RegisterCourseSearchEnpoints(app);
             TemplateSearchEndpoint.RegisterTemplateSearchEndpoint(app);
             GetPurchasesEndpoint.PurchasesEndpoints(app);
+            GuestPurchaseStartEndpoint.RegisterGuestPurchaseStartEndpoint(app);
+            GuestPurchasePaymentEndpoint.RegisterGuestPurchasePaymentEndpoint(app);
+
             CourseEndpoint.RegisterCourseEndpoints(app);
             TemplateEndpoint.RegisterTemplateEndpoints(app);
             GuestPurchaseEndpoints.RegisterGuestPurchaseEndpoints(app);
