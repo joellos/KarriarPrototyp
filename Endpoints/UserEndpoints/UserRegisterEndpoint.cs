@@ -80,7 +80,8 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                 return Results.Ok(profile);
 
             }).WithName("GetUserProfile")
-            .WithDescription("Get specefic user profile");
+            .WithDescription("Get specefic user profile")
+            .WithTags("User Profile");
 
             app.MapPut("/api/user/profile", [Authorize] async (ClaimsPrincipal user, IUserService service, UpdateProfileDto profileDto) =>
             {
@@ -95,11 +96,15 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                 {
                     RegistrationResult.Success => Results.Ok(new { message = "Profile updated successfully" }),
                     RegistrationResult.EmailAlreadyExists => Results.BadRequest("Email already in use"),
+                    RegistrationResult.InvalidEmail => Results.BadRequest("Invalid email format"),
+                    RegistrationResult.InvalidName => Results.BadRequest("Name and last name are required"),
+                    RegistrationResult.InvalidInput => Results.BadRequest("Name, last name, and email are required fields and cannot be empty"),
                     _ => Results.Problem("Failed to update profile")
                 };
             })
                 .WithDisplayName("UpdateUserProfile")
-                .WithDescription("Update personal information as email, name etc for a specific logged in user ");
+                .WithDescription("Update personal information as email, name etc for a specific logged in user ")
+                .WithTags("User Profile");
         }
 
     }

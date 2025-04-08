@@ -136,16 +136,17 @@ namespace CC_Karriarpartner.Services.UserServices
             if (user == null)
                 return RegistrationResult.Error;
 
-            if (string.IsNullOrWhiteSpace(profileDto.Email))
-                return RegistrationResult.InvalidEmail;
-
-            if (string.IsNullOrWhiteSpace(profileDto.Name) || string.IsNullOrWhiteSpace(profileDto.LastName))
-                return RegistrationResult.InvalidName;
+            if (string.IsNullOrWhiteSpace(profileDto.Name) ||
+                string.IsNullOrWhiteSpace(profileDto.LastName) ||
+                string.IsNullOrWhiteSpace(profileDto.Email))
+            {
+                return RegistrationResult.InvalidInput;
+            }
 
             bool isEmailChanged = !string.IsNullOrEmpty(profileDto.Email) &&
                                   user.Email != profileDto.Email;
 
-        
+
 
             if (isEmailChanged)
             {

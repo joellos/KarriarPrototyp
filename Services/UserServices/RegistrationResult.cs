@@ -7,6 +7,7 @@
         InvalidEmail,
         InvalidPassword,
         Error,
-        InvalidName
+        InvalidName,
+        InvalidInput
     }
 }
