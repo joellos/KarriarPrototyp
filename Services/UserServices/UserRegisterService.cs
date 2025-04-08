@@ -32,7 +32,7 @@ namespace CC_Karriarpartner.Services.UserServices
                 PurchaseDate = p.BuyDate,
                 Price = p.Price,
                 Items = p.PurchaseItems
-              .Where(pi => pi.Course != null) 
+              .Where(pi => pi.Course != null)
               .Select(pi => new UserPurchaseItemDto
               {
                   ItemId = pi.PurchaseItemId,
@@ -112,6 +112,63 @@ namespace CC_Karriarpartner.Services.UserServices
             await context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<UserProfileDto> GetUserProfile(int userId)//get user profile info
+        {
+            var user = await context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+            return new UserProfileDto
+            {
+                Name = user.Name,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.Phone,
+
+            };
+        }
+
+        public async Task<RegistrationResult> UpdateUserProfile(int userId, UpdateProfileDto profileDto)
+        {
+            var user = await context.Users.FindAsync(userId);
+            if (user == null)
+                return RegistrationResult.Error;
+
+            if (string.IsNullOrWhiteSpace(profileDto.Email))
+                return RegistrationResult.InvalidEmail;
+
+            if (string.IsNullOrWhiteSpace(profileDto.Name) || string.IsNullOrWhiteSpace(profileDto.LastName))
+                return RegistrationResult.InvalidName;
+
+            bool isEmailChanged = !string.IsNullOrEmpty(profileDto.Email) &&
+                                  user.Email != profileDto.Email;
+
+        
+
+            if (isEmailChanged)
+            {
+                if (await context.Users.AnyAsync(user => user.Email == profileDto.Email))
+                    return RegistrationResult.EmailAlreadyExists;
+
+                string verificationToken = GenerateVerification();
+                user.EmailVerification = verificationToken;
+                user.Email = profileDto.Email;
+                user.Verified = false;
+
+                await emailService.SendVerificationEmailAsync(user.Email, verificationToken, user.Name);
+            }
+            user.Name = profileDto.Name;
+            user.LastName = profileDto.LastName;
+            user.Phone = profileDto.Phone;
+
+            await context.SaveChangesAsync();
+            return RegistrationResult.Success;
+        }
+
+
+
 
         private string GenerateVerification()
         {
