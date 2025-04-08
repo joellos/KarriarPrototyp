@@ -119,6 +119,31 @@ namespace CC_Karriarpartner
                 app.UseSwaggerUI();
             }
 
+            //customisable error messages
+            app.UseStatusCodePages(async statusCodeContext =>
+            {
+                var response = statusCodeContext.HttpContext.Response;
+
+                if (response.StatusCode == StatusCodes.Status401Unauthorized)
+                {
+                    response.ContentType = "application/json";
+                    await response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
+                    {
+                        status = 401,
+                        message = "Not authorized to access this resource"
+                    }));
+                }
+                else if (response.StatusCode == StatusCodes.Status403Forbidden)
+                {
+                    response.ContentType = "application/json";
+                    await response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
+                    {
+                        status = 403,
+                        message = "You do not have permission to access this resource"
+                    }));
+                }
+            });
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
