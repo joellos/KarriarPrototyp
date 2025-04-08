@@ -177,7 +177,6 @@ namespace CC_Karriarpartner
 
             CourseEndpoint.RegisterCourseEndpoints(app);
             TemplateEndpoint.RegisterTemplateEndpoints(app);
-            GuestPurchaseEndpoints.RegisterGuestPurchaseEndpoints(app);
 
             app.Run();
         }
