@@ -94,8 +94,7 @@ namespace CC_Karriarpartner
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
-            // So 
+ 
             builder.Services.AddRateLimiter(option =>
             {
                 option.AddPolicy("login", httpcontext => RateLimitPartition.GetFixedWindowLimiter( // Rate limiting for login endpoint

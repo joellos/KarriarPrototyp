@@ -1,4 +1,5 @@
 ﻿using CC_Karriarpartner.DTOs.AuthLogDto;
+using CC_Karriarpartner.Models;
 using CC_Karriarpartner.Services.AuthServices;
 
 namespace CC_Karriarpartner.Endpoints.LoginEndpoints
@@ -38,6 +39,7 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                 return Results.Ok("Logged in");
 
             }).RequireAuthorization();
+
 
         }
     }
