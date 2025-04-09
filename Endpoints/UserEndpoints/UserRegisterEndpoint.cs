@@ -106,11 +106,7 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                 .WithDescription("Update personal information as email, name etc for a specific logged in user ")
                 .WithTags("User Profile");
 
-            app.MapDelete("/api/user/profile", [Authorize] async (
-    ClaimsPrincipal user,
-     [FromBody] DeleteUserDto deleteDto,
-     IUserService userService,
-     ILogger<Program> logger) =>
+            app.MapDelete("/api/user/profile", [Authorize] async (ClaimsPrincipal user, [FromBody] DeleteUserDto deleteDto, IUserService userService, ILogger<Program> logger) =>
             {
                 try
                 {
@@ -148,8 +144,9 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                     logger.LogError(ex, "Error deleting user profile");
                     return Results.Problem("An error occurred while deleting profile");
                 }
-            })
- .WithName("DeleteUserProfile").WithTags("User Profile");
+            }).WithName("DeleteUserProfile")
+            .WithTags("User Profile");
+
         }
     }
 }
