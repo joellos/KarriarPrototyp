@@ -168,6 +168,37 @@ namespace CC_Karriarpartner.Services.UserServices
             return RegistrationResult.Success;
         }
 
+        public async Task<bool> DeleteUserProfile(int userId, string password)
+
+        {
+            var user = await context.Users.FindAsync(userId);
+
+            if (user != null)
+            {
+                return false;
+            }
+           
+            if(!PasswordHasher.VerifyPassword(password, user.Password))
+            {
+                return false;
+            }
+            user.IsDeleted = true;
+            user.DeletedAt = DateTime.UtcNow;
+
+            //anonymize data to follow gdpr
+            user.Name = "[Deleted]";
+            user.LastName = "[Deleted]";
+            user.Phone = null;
+            user.ProfileImageUrl = null;
+            user.Verified = false;
+            user.Email = $"deleted_{Guid.NewGuid()}_{user.Email}";
+
+            await context.SaveChangesAsync();
+            
+            return true;
+
+        }
+
 
 
 

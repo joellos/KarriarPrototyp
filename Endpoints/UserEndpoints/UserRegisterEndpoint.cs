@@ -105,7 +105,26 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                 .WithDisplayName("UpdateUserProfile")
                 .WithDescription("Update personal information as email, name etc for a specific logged in user ")
                 .WithTags("User Profile");
-        }
 
+            app.MapDelete("/api/user/profile", [Authorize] async (ClaimsPrincipal user, [FromBody]DeleteUserDto deleteDto, IUserService service) =>
+            {
+                var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    return Results.BadRequest("Could not identify user");
+                }
+                var result = await service.DeleteUserProfile(userId, deleteDto.Password);
+                if (result)
+                {
+                    return Results.Ok(new { message = "Profile deleted successfully" });
+                }
+                else
+                {
+                    return Results.BadRequest("Failed to delete profile. Check your profile");
+
+                }
+
+            }).WithTags("User Profile");
+        }
     }
 }

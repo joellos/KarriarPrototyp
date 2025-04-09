@@ -11,5 +11,6 @@ namespace CC_Karriarpartner.Services.IUserServices
         Task<List<UserPurchaseHistoryDto>> GetPurchaseHistory(int userId);
         Task<UserProfileDto> GetUserProfile(int userId);
         Task<RegistrationResult> UpdateUserProfile(int userId, UpdateProfileDto profileDto);
+        Task <bool> DeleteUserProfile(int userId, string password);
     }
 }
