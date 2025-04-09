@@ -14,7 +14,7 @@ namespace CC_Karriarpartner.Services.AuthServices
     public class AuthService(KarriarPartnerDBContext context, IConfiguration configuration) : IAuthService
     {
 
-        public async Task<TokenResponseDto> LoginAsync(LoginDto request)
+        public async Task<TokenResponseDto> AuthenticateUserAsync(LoginDto request)
         {
             // Login method for user authentication and generating JWT tokens
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
@@ -29,14 +29,14 @@ namespace CC_Karriarpartner.Services.AuthServices
                 return null;
             }
 
-            TokenResponseDto response = await CreateTokenResponse(user);
+            TokenResponseDto response = await GenerateTokenResponseAsync(user);
             return response;
         }
 
-        private async Task<string> GenerateAndSaveRefreshToken(User user)
+        private async Task<string> CreateAndSaveRefreshTokenAsync(User user)
         {
             // Generate a new refresh token and save it to the database
-            var refreshToken = RefreshTokenGenerator();
+            var refreshToken = GenerateSecureRefreshToken();
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpireTime = DateTime.UtcNow.AddDays(7);
@@ -46,7 +46,7 @@ namespace CC_Karriarpartner.Services.AuthServices
             return refreshToken;
         }
 
-        private static string RefreshTokenGenerator()
+        private static string GenerateSecureRefreshToken()
         {
             // Generate a cryptographically secure token with 256 bits (32 bytes) of entropy
             // This provides protection against brute force and prediction attacks
@@ -56,7 +56,7 @@ namespace CC_Karriarpartner.Services.AuthServices
             return Convert.ToBase64String(randomNum);
         }
 
-        private async Task<User?> ValidateRefreshTokenAsync(int userId, string refreshToken)
+        private async Task<User?> VerifyRefreshTokenValidityAsync(int userId, string refreshToken)
         {
 
 
@@ -73,30 +73,30 @@ namespace CC_Karriarpartner.Services.AuthServices
 
             return user;
         }
-        public async Task<TokenResponseDto?> RefreshTokensAsync(RequestRefreshTokenDto request)
+        public async Task<TokenResponseDto?> RenewAuthenticationTokensAsync(RequestRefreshTokenDto request)
         {
             // Validate the refresh token and user ID 
-            var user = await ValidateRefreshTokenAsync(request.UserId, request.RefreshToken);
+            var user = await VerifyRefreshTokenValidityAsync(request.UserId, request.RefreshToken);
 
             if (user is null)
             {
                 return null;
             }
 
-            return await CreateTokenResponse(user);
+            return await GenerateTokenResponseAsync(user);
         }
 
-        private async Task<TokenResponseDto> CreateTokenResponse(User user)
+        private async Task<TokenResponseDto> GenerateTokenResponseAsync(User user)
         {
             // Generate a new access token and refresh token
             return new TokenResponseDto
             {
-                AccessToken = CreateToken(user),
-                RefreshToken = await GenerateAndSaveRefreshToken(user)
+                AccessToken = GenerateAccessToken(user),
+                RefreshToken = await CreateAndSaveRefreshTokenAsync(user)
             };
         }
 
-        private string CreateToken(User _user)
+        private string GenerateAccessToken(User _user)
         {
             // Build essential user claims for the JWT
             var claims = new List<Claim>

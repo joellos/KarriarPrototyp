@@ -18,7 +18,7 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                 {
                     return Results.BadRequest("Email and password required");
                 }
-                var result = await authService.LoginAsync(loginDto);
+                var result = await authService.AuthenticateUserAsync(loginDto);
                 if (result != null)
                 {
                     return Results.Ok(result);
