@@ -173,7 +173,7 @@ namespace CC_Karriarpartner.Services.UserServices
         {
             var user = await context.Users.FindAsync(userId);
 
-            if (user != null)
+            if (user == null)
             {
                 return false;
             }
@@ -188,7 +188,7 @@ namespace CC_Karriarpartner.Services.UserServices
             //anonymize data to follow gdpr
             user.Name = "[Deleted]";
             user.LastName = "[Deleted]";
-            user.Phone = null;
+            user.Phone = "[DeletedPhone]";
             user.ProfileImageUrl = null;
             user.Verified = false;
             user.Email = $"deleted_{Guid.NewGuid()}_{user.Email}";
