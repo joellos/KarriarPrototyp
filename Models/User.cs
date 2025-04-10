@@ -17,7 +17,7 @@ namespace CC_Karriarpartner.Models
 
         [EmailAddress]
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Email { get; set; }
 
         [Phone]
@@ -47,8 +47,10 @@ namespace CC_Karriarpartner.Models
         public string? EmailVerification { get; set; }
         // tokens for authentication
         public string? RefreshToken { get; set; }
-        public DateTime? RefreshTokenExpireTime { get; set; }
+        public DateTime RefreshTokenExpireTime { get; set; }
         public string Role { get; set; } = string.Empty;
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         public virtual List<UserSubscriptions> Subscriptions { get; set; }
         public virtual List<Purchase> Purchases { get; set; }

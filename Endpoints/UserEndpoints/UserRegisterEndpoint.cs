@@ -105,7 +105,48 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                 .WithDisplayName("UpdateUserProfile")
                 .WithDescription("Update personal information as email, name etc for a specific logged in user ")
                 .WithTags("User Profile");
-        }
 
+            app.MapDelete("/api/user/profile", [Authorize] async (ClaimsPrincipal user, [FromBody] DeleteUserDto deleteDto, IUserService userService, ILogger<Program> logger) =>
+            {
+                try
+                {
+                    if (deleteDto == null)
+                    {
+                        logger.LogWarning("DeleteUserDto is null");
+                        return Results.BadRequest("No password provided");
+                    }
+
+                    logger.LogInformation("Attempting to delete user profile");
+
+                    var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+
+                    if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                    {
+                        logger.LogWarning("Failed to extract user ID from claims");
+                        return Results.BadRequest("Could not identify user");
+                    }
+
+                    var result = await userService.DeleteUserProfile(userId, deleteDto.Password);
+
+                    if (result)
+                    {
+                        logger.LogInformation($"User {userId} deleted successfully");
+                        return Results.Ok(new { message = "Profile deleted successfully" });
+                    }
+                    else
+                    {
+                        logger.LogWarning($"Failed to delete user {userId} - password verification failed");
+                        return Results.BadRequest("Failed to delete profile. Please check your password.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Error deleting user profile");
+                    return Results.Problem("An error occurred while deleting profile");
+                }
+            }).WithName("DeleteUserProfile")
+            .WithTags("User Profile");
+
+        }
     }
 }
