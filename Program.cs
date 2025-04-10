@@ -21,6 +21,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.RateLimiting;
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using CC_Karriarpartner.Services.CustomAssembly;
+using CC_Karriarpartner.Endpoints.GenerateDiplomaEndpoints;
+
 
 namespace CC_Karriarpartner
 {
@@ -55,6 +60,12 @@ namespace CC_Karriarpartner
                     ValidateIssuerSigningKey = true
                 };
             });
+
+            // Laddar ner native DinkToPdf och Registrerar den
+            var context = new CustomAssemblyLoadContext();
+            var dllPath = Path.Combine(Directory.GetCurrentDirectory(), "DinkToPdfNative", "libwhtmltox.dll");
+            context.LoadUnmanagedLibrary(dllPath);
+            builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
             builder.Services.AddAuthorizationBuilder().AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -174,6 +185,7 @@ namespace CC_Karriarpartner
             GetPurchasesEndpoint.PurchasesEndpoints(app);
             GuestPurchaseStartEndpoint.RegisterGuestPurchaseStartEndpoint(app);
             GuestPurchasePaymentEndpoint.RegisterGuestPurchasePaymentEndpoint(app);
+            CourseDiplomaEndpoint.RegisterCourseDiplomaEndpoint(app);
 
             CourseEndpoint.RegisterCourseEndpoints(app);
             TemplateEndpoint.RegisterTemplateEndpoints(app);
