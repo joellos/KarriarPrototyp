@@ -1,5 +1,4 @@
 ﻿using CC_Karriarpartner.Models;
-using CC_Karriarpartner.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CC_Karriarpartner.Data
@@ -15,6 +14,7 @@ namespace CC_Karriarpartner.Data
             public DbSet<UserSubscriptions> UserSubscriptions { get; set; }
             public DbSet<Purchase> Purchases { get; set; }
             public DbSet<PurchaseItem> PurchaseItems { get; set; }
+            public DbSet<GuestPurchase> GuestPurchases { get; set; }
             public DbSet<Template> Templates { get; set; }
             public DbSet<Course> Courses { get; set; }
             public DbSet<Certificate> Certificates { get; set; }

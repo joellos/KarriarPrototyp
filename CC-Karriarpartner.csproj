@@ -5,9 +5,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>CC_Karriarpartner</RootNamespace>
+    <UserSecretsId>e399f07b-7af6-4900-8cfe-fc7ece532a9a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
@@ -24,9 +28,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Endpoints\" />
-    <Folder Include="Services\" />
+    <Folder Include="Middlewere\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CC_Karriarpartner.Models
 {
@@ -12,19 +13,20 @@ namespace CC_Karriarpartner.Models
         public string Title { get; set; }
 
         [Required]
-        [MinLength(10)]
+        [MinLength(5)]
         [MaxLength(2000)]
         public string Description { get; set; }
 
         [Required]
-        [MaxLength(10)]
+        [MaxLength(35)]
         public string Category { get; set; }
 
         [Required]
-        [MaxLength(10)]
+        [MaxLength(35)]
         public string Level { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal(18,2)")]
         [Range(0, 9999.99)] // Om den ingår i premenation?
         public decimal Price { get; set; }
 
