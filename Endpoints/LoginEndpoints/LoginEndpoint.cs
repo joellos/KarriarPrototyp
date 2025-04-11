@@ -1,4 +1,5 @@
 ﻿using CC_Karriarpartner.DTOs.AuthLogDto;
+using CC_Karriarpartner.Models;
 using CC_Karriarpartner.Services.AuthServices;
 
 namespace CC_Karriarpartner.Endpoints.LoginEndpoints
@@ -17,7 +18,7 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                 {
                     return Results.BadRequest("Email and password required");
                 }
-                var result = await authService.LoginAsync(loginDto);
+                var result = await authService.AuthenticateUserAsync(loginDto);
                 if (result != null)
                 {
                     return Results.Ok(result);
@@ -39,6 +40,17 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
             {
                 return Results.Ok("Logged in");
 
+            }).RequireAuthorization();
+            // endpoint to refresh the token
+            app.MapPost("/refresh-token", async (RequestRefreshTokenDto request, IAuthService service) =>
+            {
+                var tokenResponse = await service.RenewAuthenticationTokensAsync(request);
+                if (tokenResponse is null)
+                {
+                    return Results.Unauthorized();
+                }
+                return Results.Ok(tokenResponse);
+            });
             }).RequireAuthorization()
             .WithTags("Login and Register");
 
