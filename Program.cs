@@ -33,6 +33,7 @@ namespace CC_Karriarpartner
     {
         public static void Main(string[] args)
         {
+            // This is a comment.
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
