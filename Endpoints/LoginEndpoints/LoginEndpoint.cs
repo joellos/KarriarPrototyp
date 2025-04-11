@@ -39,7 +39,16 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                 return Results.Ok("Logged in");
 
             }).RequireAuthorization();
-
+            // endpoint to refresh the token
+            app.MapPost("/refresh-token", async (RequestRefreshTokenDto request, IAuthService service) =>
+            {
+                var tokenResponse = await service.RenewAuthenticationTokensAsync(request);
+                if (tokenResponse is null)
+                {
+                    return Results.Unauthorized();
+                }
+                return Results.Ok(tokenResponse);
+            });
 
         }
     }
