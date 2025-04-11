@@ -5,6 +5,7 @@ using CC_Karriarpartner.Services;
 using Microsoft.EntityFrameworkCore;
 using CC_Karriarpartner.Models;
 using CC_Karriarpartner.DTOs.UserDtos;
+using CC_Karriarpartner.DTOs.PasswordDtos;
 
 namespace CC_Karriarpartner.Services.UserServices
 {
@@ -200,7 +201,58 @@ namespace CC_Karriarpartner.Services.UserServices
         }
 
 
+        public async Task<bool> RequestPasswordResetAsync(string email)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
+            if (user == null)
+                return false; // Don't reveal if the email exists
+
+            // Generate a random token
+            string resetToken = GenerateResetToken();
+
+            // Save token to user record with expiration time
+            user.PasswordResetToken = resetToken;
+            user.PasswordResetExpire = DateTime.UtcNow.AddHours(24); // 24-hour expiration
+
+            await context.SaveChangesAsync();
+
+            // Send password reset email
+            await emailService.SendPasswordResetEmailAsync(user.Email, resetToken, user.Name);
+
+            return true;
+        }
+
+        public async Task<bool> ResetPasswordAsync(ResetPasswordDto resetDto)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u =>
+                u.Email == resetDto.Email &&
+                u.PasswordResetToken == resetDto.Token &&
+                u.PasswordResetExpire > DateTime.UtcNow);
+
+            if (user == null)
+                return false; // Invalid or expired token
+
+            // Validate new password
+            if (!IsPasswordValid(resetDto.NewPassword))
+                return false;
+
+            // Update password
+            user.Password = PasswordHasher.HashPassword(resetDto.NewPassword);
+
+            // Clear reset token
+            user.PasswordResetToken = null;
+            user.PasswordResetExpire = null;
+
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+
+        private string GenerateResetToken()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
 
         private string GenerateVerification()
         {
@@ -232,5 +284,7 @@ namespace CC_Karriarpartner.Services.UserServices
 
 
         }
+
+
     }
 }

@@ -54,5 +54,28 @@ namespace CC_Karriarpartner.Services.UserServices
             await SendEmailAsync(email, subject, body);
 
         }
+
+        public async Task SendPasswordResetEmailAsync(string email, string resetToken, string userName)
+        {
+            string baseUrl = _configuration["ApplicationUrl"];
+            // This should point to your /reset-password endpoint, not directly to HTML
+            string resetUrl = $"{baseUrl}/reset-password?email={WebUtility.UrlEncode(email)}&token={WebUtility.UrlEncode(resetToken)}";
+
+            string subject = "Reset Your Password";
+            string body = $@"
+        <html>
+        <body>
+            <h2>Password Reset Request</h2>
+            <p>Hello {userName},</p>
+            <p>We received a request to reset your password. Please click the link below to set a new password:</p>
+            <p><a href='{resetUrl}'>Reset Password</a></p>
+            <p>This link will expire in 24 hours.</p>
+            <p>If you didn't request this, please ignore this email.</p>
+        </body>
+        </html>";
+
+            await SendEmailAsync(email, subject, body);
+        }
+
     }
 }

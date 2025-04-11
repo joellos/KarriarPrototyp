@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using CC_Karriarpartner.DTOs.UserDtos;
+using CC_Karriarpartner.DTOs.PasswordDtos;
 
 namespace CC_Karriarpartner.Endpoints.UserEndpoints
 {
@@ -106,6 +107,48 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                 .WithDescription("Update personal information as email, name etc for a specific logged in user ")
                 .WithTags("User Profile");
 
+            app.MapPost("/api/forgot-password", async (ForgotPasswordDto model, IUserService userService) =>
+            {
+                if (string.IsNullOrEmpty(model.Email))
+                {
+                    return Results.BadRequest("Email is required");
+                }
+
+                await userService.RequestPasswordResetAsync(model.Email);
+
+                // Always return success to prevent email enumeration attacks
+                return Results.Ok(new { message = "If the email exists, a reset link has been sent." });
+            }).WithTags("User Profile");
+
+            app.MapGet("/reset-password", async (HttpContext context, string email, string token) =>
+            {
+                // Validate token and email
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+                {
+                    return Results.Redirect("/invalid-reset.html");
+                }
+
+                // Redirect to the HTML page
+                return Results.Redirect($"/reset-password.html?email={Uri.EscapeDataString(email)}&token={Uri.EscapeDataString(token)}");
+            }).WithTags("User Profile");
+
+            app.MapPost("/api/reset-password", async (ResetPasswordDto resetDto, IUserService userService) =>
+            {
+                if (resetDto == null)
+                {
+                    return Results.BadRequest(new { message = "Invalid request data" });
+                }
+
+                var result = await userService.ResetPasswordAsync(resetDto);
+
+                if (result)
+                {
+                    return Results.Ok(new { message = "Password has been reset successfully" });
+                }
+
+                return Results.BadRequest(new { message = "Invalid or expired password reset token" });
+            }).WithTags("User Profile");
+
             app.MapDelete("/api/user/profile", [Authorize] async (ClaimsPrincipal user, [FromBody] DeleteUserDto deleteDto, IUserService userService, ILogger<Program> logger) =>
             {
                 try
@@ -146,6 +189,10 @@ namespace CC_Karriarpartner.Endpoints.UserEndpoints
                 }
             }).WithName("DeleteUserProfile")
             .WithTags("User Profile");
+
+
+
+
 
         }
     }
