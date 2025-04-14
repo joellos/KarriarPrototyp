@@ -50,7 +50,6 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                     return Results.Unauthorized();
                 }
                 return Results.Ok(tokenResponse);
-            });
             }).RequireAuthorization()
             .WithTags("Login and Register");
 
