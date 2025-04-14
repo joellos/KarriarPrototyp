@@ -1,6 +1,10 @@
-﻿using CC_Karriarpartner.DTOs.AuthLogDto;
+﻿using CC_Karriarpartner.Data;
+using CC_Karriarpartner.DTOs.AuthLogDto;
 using CC_Karriarpartner.Models;
+using CC_Karriarpartner.Services;
 using CC_Karriarpartner.Services.AuthServices;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace CC_Karriarpartner.Endpoints.LoginEndpoints
 {
@@ -8,7 +12,7 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
     {
         public static void LoginEndpointAsync(WebApplication app)
         {
-            app.MapPost("/login", async (LoginDto loginDto, IAuthService authService) =>
+            app.MapPost("/login", async (LoginDto loginDto, IAuthService authService, HttpContext httpContext) =>
             {
                 if (loginDto == null)
                 {
@@ -19,16 +23,76 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                     return Results.BadRequest("Email and password required");
                 }
                 var result = await authService.AuthenticateUserAsync(loginDto);
-                if (result != null)
+
+                if (result is null)
                 {
-                    return Results.Ok(result);
+                    return Results.BadRequest("Invalid credentials");
                 }
-                else
-                {
-                    return Results.BadRequest("Login failed.");
-                }
+                // Set the access token cookie
+                httpContext.Response.Cookies.Append("accessToken", result.AccessToken, GetCookieOptions.AccessTokenCookie());
+                httpContext.Response.Cookies.Append("refreshToken", result.RefreshToken, GetCookieOptions.RefreshTokenCookie());
+
+                return Results.Ok(result); // return the token response 
+
+                // ALTERNATIVE if we want to restun user data/infio to frontend, Need getUserByIdAsync method in the service
+                //return Results.Ok(new
+                //{
+                //    userId = user.UserId.ToString(),
+                //    username = user.UserName,
+                //    email = user.Email
+                //});
+
+
             }).WithTags("Login and Register")
-                .RequireRateLimiting("login");
+                .RequireRateLimiting("login"); // limit login attempts
+
+            // endpoint to refresh the token
+            app.MapPost("/refresh-token", async (IAuthService service, KarriarPartnerDBContext context, HttpContext http) =>
+            {
+                // Check if refresh token exists in cookies
+                if (!http.Request.Cookies.TryGetValue("refreshToken", out string? refreshToken))
+                {
+                    return Results.Unauthorized();
+                }
+
+                // Find user with this refresh token
+                var user = await context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+                if (user == null || user.RefreshTokenExpireTime <= DateTime.UtcNow)
+                {
+                    return Results.Unauthorized();
+                }
+
+                // Generate new token pair
+                var accessToken = service.GenerateAccessToken(user);
+                var newRefreshToken = service.GenerateSecureRefreshToken(); // Make this public
+
+                // Update user in database
+                user.RefreshToken = newRefreshToken;
+                user.RefreshTokenExpireTime = DateTime.UtcNow.AddDays(7);
+                await context.SaveChangesAsync();
+
+                // Set cookies
+                http.Response.Cookies.Append("accessToken", accessToken, GetCookieOptions.AccessTokenCookie());
+
+                http.Response.Cookies.Append("refreshToken", newRefreshToken, GetCookieOptions.RefreshTokenCookie());
+
+                return Results.Ok();
+
+            }).AllowAnonymous()
+            .WithTags("Login and Register");
+            // allow anonymous because if the accestoken is expired, we need to allow the user to get a new one
+            
+            // endpoint to logout
+            app.MapPost("/logout", (HttpContext context) =>
+            {
+                context.Response.Cookies.Delete("accessToken");
+                context.Response.Cookies.Delete("refreshToken");
+
+
+                return Results.Ok("Logged out successfully");
+
+            }).RequireAuthorization().WithTags("Login and Register");
+
             // Test endpoints
             app.MapGet("/AuthAdmin", () =>
             {
@@ -41,27 +105,6 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                 return Results.Ok("Logged in");
 
             }).RequireAuthorization();
-            // endpoint to refresh the token
-            app.MapPost("/refresh-token", async (RequestRefreshTokenDto request, IAuthService service) =>
-            {
-                var tokenResponse = await service.RenewAuthenticationTokensAsync(request);
-                if (tokenResponse is null)
-                {
-                    return Results.Unauthorized();
-                }
-                return Results.Ok(tokenResponse);
-            }).RequireAuthorization()
-            .WithTags("Login and Register");
-            // endpoint to logout
-            app.MapPost("/logout", (HttpContext context) =>
-            {
-                context.Response.Cookies.Delete("accessToken");
-                context.Response.Cookies.Delete("refreshToken");
-
-
-                return Results.Ok("Logged out successfully");
-
-            }).RequireAuthorization().WithTags("Login and Register");
         }
     }
 }
