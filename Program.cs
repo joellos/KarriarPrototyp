@@ -60,6 +60,14 @@ namespace CC_Karriarpartner
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(token)),
                     ValidateIssuerSigningKey = true
                 };
+                options.Events = new JwtBearerEvents // this override to look for tookens in cookies
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["accessToken"];
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             // Laddar ner native DinkToPdf och Registrerar den
