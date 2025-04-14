@@ -47,7 +47,7 @@ namespace CC_Karriarpartner.Models
         public string? EmailVerification { get; set; }
         // tokens for authentication
         public string? RefreshToken { get; set; }
-        public DateTime RefreshTokenExpireTime { get; set; }
+        public DateTime? RefreshTokenExpireTime { get; set; }
         public string Role { get; set; } = string.Empty;
         public bool IsDeleted { get; set; }
         public DateTime? DeletedAt { get; set; }
