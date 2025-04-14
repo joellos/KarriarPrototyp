@@ -85,8 +85,8 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
             // endpoint to logout
             app.MapPost("/logout", (HttpContext context) =>
             {
-                context.Response.Cookies.Delete("accessToken");
-                context.Response.Cookies.Delete("refreshToken");
+                context.Response.Cookies.Delete("accessToken", GetCookieOptions.AccessTokenCookie());
+                context.Response.Cookies.Delete("refreshToken", GetCookieOptions.RefreshTokenCookie());
 
 
                 return Results.Ok("Logged out successfully");
