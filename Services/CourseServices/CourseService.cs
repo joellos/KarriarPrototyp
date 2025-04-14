@@ -36,7 +36,6 @@ namespace CC_Karriarpartner.Services.CourseServices
                 Category = course.Category,
                 Price = course.Price,
                 Active = course.Active,
-                IsCompleted = course.Completed,
 
                 Videos = course.Videos?.Select(v => new CourseVideoDto
                 {
@@ -67,8 +66,7 @@ namespace CC_Karriarpartner.Services.CourseServices
                 Description = course.Description,
                 Category = course.Category,
                 Price = course.Price,
-                Active = course.Active,
-                IsCompleted = course.Completed
+                Active = course.Active
             };
 
             return courseDto;
@@ -90,7 +88,6 @@ namespace CC_Karriarpartner.Services.CourseServices
                 Category = courseDto.Category,
                 Price = courseDto.Price,
                 Active = courseDto.Active,
-                Completed = courseDto.IsCompleted,
                 Level = "Beginner" // Default value - adjust as needed
             };
 
@@ -122,7 +119,6 @@ namespace CC_Karriarpartner.Services.CourseServices
             course.Category = courseDto.Category;
             course.Price = courseDto.Price;
             course.Active = courseDto.Active;
-            course.Completed = courseDto.IsCompleted;
             course.Videos = courseDto.Videos?.Select(v => new CourseVideo
             {
                 Title = v.Title,

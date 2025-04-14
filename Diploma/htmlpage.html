@@ -1,22 +1,96 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="sv">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <title>Diplom</title>
     <style>
         body {
-            font-family: Georgia, serif;
-            text-align: center;
-            padding: 40px;
+            font-family: 'Georgia', serif;
+            background: linear-gradient(to bottom, #f0f4f8, #dce3ec);
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         .certificate {
-            border: 10px solid #004080;
-            padding: 30px;
+            background: #fff;
+            border: 12px double #004080;
+            padding: 60px 40px;
+            width: 800px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            position: relative;
         }
 
+            .certificate::before, .certificate::after {
+                content: "";
+                position: absolute;
+                width: 60px;
+                height: 60px;
+                background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Check_green_icon.svg/1024px-Check_green_icon.svg.png') no-repeat center/cover;
+                top: 30px;
+            }
+
+            .certificate::before {
+                left: 30px;
+            }
+
+            .certificate::after {
+                right: 30px;
+            }
+
         h1 {
+            font-size: 48px;
             color: #004080;
-            font-size: 40px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #2b3e50;
+            margin: 20px 0;
+        }
+
+        h3 {
+            font-size: 28px;
+            color: #555;
+            font-style: italic;
+            margin: 20px 0;
+        }
+
+        p {
+            font-size: 20px;
+            color: #444;
+        }
+
+        .date-id {
+            margin-top: 40px;
+            font-size: 16px;
+            color: #777;
+        }
+
+        .signature-section {
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .signature {
+            border-top: 1px solid #444;
+            width: 200px;
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .seal {
+            width: 100px;
+            height: 100px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Golden_seal.svg/1024px-Golden_seal.svg.png') no-repeat center/contain;
         }
     </style>
 </head>
@@ -27,8 +101,15 @@
         <h2>{UserName}</h2>
         <p>för att ha slutfört kursen</p>
         <h3>{CourseName}</h3>
-        <p>Datum: {Date}</p>
-        <p>DIPLOM ID: {id}</p>
+        <div class="date-id">
+            <p>Datum: {Date}</p>
+            <p>Diplom-ID: {DiplomaId}</p>
+        </div>
+        <div class="signature-section">
+            <div class="signature">Kursledare</div>
+            <div class="seal"></div>
+            <div class="signature">Utbildningsansvarig</div>
+        </div>
     </div>
 </body>
 </html>

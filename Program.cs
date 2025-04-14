@@ -82,11 +82,15 @@ namespace CC_Karriarpartner
                 });
             });
 
-            // Laddar ner native DinkToPdf och Registrerar den
-            var context = new CustomAssemblyLoadContext();
-            var dllPath = Path.Combine(Directory.GetCurrentDirectory(), "DinkToPdfNative", "libwhtmltox.dll");
-            context.LoadUnmanagedLibrary(dllPath);
-            builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            // Kör inte DLL-laddning under EF Core migrations-kommandon
+            if (!AppDomain.CurrentDomain.FriendlyName.ToLower().Contains("ef"))
+            {
+                var dllPath = Path.Combine(Directory.GetCurrentDirectory(), "DinkToPdfNative", "libwkhtmltox.dll");
+                var context = new CustomAssemblyLoadContext();
+                context.LoadUnmanagedLibrary(dllPath);
+                builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            }
+
 
             builder.Services.AddAuthorizationBuilder().AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

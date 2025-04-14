@@ -44,11 +44,19 @@ namespace CC_Karriarpartner.Migrations
                     b.Property<int>("UserId_FK")
                         .HasColumnType("int");
 
+                    b.Property<string>("VerificationId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.HasKey("CertificateId");
 
                     b.HasIndex("CourseId_FK");
 
                     b.HasIndex("UserId_FK");
+
+                    b.HasIndex("VerificationId")
+                        .IsUnique();
 
                     b.ToTable("Certificates");
                 });
@@ -68,9 +76,6 @@ namespace CC_Karriarpartner.Migrations
                         .IsRequired()
                         .HasMaxLength(35)
                         .HasColumnType("nvarchar(35)");
-
-                    b.Property<bool>("Completed")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -359,6 +364,35 @@ namespace CC_Karriarpartner.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("CC_Karriarpartner.Models.UserCourse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("CompletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCourses");
+                });
+
             modelBuilder.Entity("CC_Karriarpartner.Models.UserSubscriptions", b =>
                 {
                     b.Property<int>("SubscriptionId")
@@ -485,6 +519,25 @@ namespace CC_Karriarpartner.Migrations
                     b.Navigation("Purchase");
 
                     b.Navigation("Template");
+                });
+
+            modelBuilder.Entity("CC_Karriarpartner.Models.UserCourse", b =>
+                {
+                    b.HasOne("CC_Karriarpartner.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CC_Karriarpartner.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CC_Karriarpartner.Models.UserSubscriptions", b =>

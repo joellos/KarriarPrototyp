@@ -31,7 +31,6 @@ namespace CC_Karriarpartner.Models
         public decimal Price { get; set; }
 
         public bool Active { get; set; } = true; // True som default??
-        public bool Completed { get; set; } = false;
 
         public virtual List<CourseVideo> Videos { get; set; }
         public virtual List<CourseReview> Reviews { get; set; }

@@ -1,12 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace CC_Karriarpartner.Models
 {
+    [Index(nameof(VerificationId), IsUnique = true)]
     public class Certificate
     {
         [Key]
         public int CertificateId { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string VerificationId { get; set; }
 
         [Required]
         [ForeignKey("User")]

@@ -30,7 +30,17 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="DinkToPdfNative\" />
     <Folder Include="Middlewere\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DinkToPdfNative\libwkhtmltox.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="DinkToPdfNative\wkhtmltox.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

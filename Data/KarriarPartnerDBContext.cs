@@ -20,9 +20,11 @@ namespace CC_Karriarpartner.Data
             public DbSet<Certificate> Certificates { get; set; }
             public DbSet<CourseReview> CourseReviews { get; set; }
             public DbSet<CourseVideo> CourseVideos { get; set; }
+            public DbSet<UserCourse> UserCourses { get; set; }
 
 
-            // OnModelCreating för relationern?!
+
+        // OnModelCreating för relationern?!
 
     }
 }
