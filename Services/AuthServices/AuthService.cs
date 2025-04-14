@@ -13,7 +13,6 @@ namespace CC_Karriarpartner.Services.AuthServices
 {
     public class AuthService(KarriarPartnerDBContext context, IConfiguration configuration) : IAuthService
     {
-
         public async Task<TokenResponseDto> AuthenticateUserAsync(LoginDto request)
         {
             // Login method for user authentication and generating JWT tokens
@@ -46,7 +45,7 @@ namespace CC_Karriarpartner.Services.AuthServices
             return refreshToken;
         }
 
-        private static string GenerateSecureRefreshToken()
+        public string GenerateSecureRefreshToken()
         {
             // Generate a cryptographically secure token with 256 bits (32 bytes) of entropy
             // This provides protection against brute force and prediction attacks
@@ -96,7 +95,7 @@ namespace CC_Karriarpartner.Services.AuthServices
             };
         }
 
-        private string GenerateAccessToken(User _user)
+        public string GenerateAccessToken(User _user)
         {
             // Build essential user claims for the JWT
             var claims = new List<Claim>

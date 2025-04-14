@@ -6,6 +6,8 @@ namespace CC_Karriarpartner.Services.AuthServices
     public interface IAuthService
     {
         Task<TokenResponseDto> AuthenticateUserAsync(LoginDto request);
+        string GenerateAccessToken(User user);
+        string GenerateSecureRefreshToken();
         Task<TokenResponseDto?> RenewAuthenticationTokensAsync(RequestRefreshTokenDto request);
 
     }
