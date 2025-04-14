@@ -41,7 +41,7 @@ namespace CC_Karriarpartner
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; // Remove later
+
             }).AddJwtBearer(options =>
             {
                 var token = builder.Configuration.GetValue<string>("Appsettings:Token");
