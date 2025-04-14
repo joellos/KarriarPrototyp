@@ -8,7 +8,7 @@
             {
                 HttpOnly = true,
                 Secure = false, // Set to true in production
-                SameSite = SameSiteMode.Lax, // Set to Lax to allow cross-site requests, Change to None/strict later
+                SameSite = SameSiteMode.Lax, // Set to Lax to work on Swagger, Change to None/strict to work on React
                 Expires = DateTimeOffset.UtcNow.AddMinutes(10)
             };
         }
@@ -18,7 +18,7 @@
             {
                 HttpOnly = true,
                 Secure = false, // Set to true in production
-                SameSite = SameSiteMode.Lax, // Set to Lax to allow cross-site requests, Change to None/strict later
+                SameSite = SameSiteMode.Lax,  // Set to Lax to work on Swagger, Change to None/strict to work on React
                 Expires = DateTimeOffset.UtcNow.AddDays(7)
             };
         }

@@ -70,6 +70,18 @@ namespace CC_Karriarpartner
                 };
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy
+                        .WithOrigins("LÄGG FRONTEND URL HÄR") 
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials(); // For cookies 
+                });
+            });
+
             // Laddar ner native DinkToPdf och Registrerar den
             var context = new CustomAssemblyLoadContext();
             var dllPath = Path.Combine(Directory.GetCurrentDirectory(), "DinkToPdfNative", "libwhtmltox.dll");
@@ -181,7 +193,7 @@ namespace CC_Karriarpartner
             });
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowFrontend");
             app.UseAuthorization();
             app.UseRateLimiter();
             app.UseStaticFiles();
