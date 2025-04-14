@@ -104,7 +104,7 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
             {
                 return Results.Ok("Logged in");
 
-            }).RequireAuthorization();
+            }).RequireAuthorization().WithTags("Login and Register");
         }
     }
 }

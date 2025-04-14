@@ -7,8 +7,8 @@
             return new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false, // Set to true in production
-                SameSite = SameSiteMode.Lax, // Set to Lax to allow cross-site requests, Change to None/strict later
+                Secure = true, 
+                SameSite = SameSiteMode.None,
                 Expires = DateTimeOffset.UtcNow.AddMinutes(10)
             };
         }
@@ -17,8 +17,8 @@
             return new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false, // Set to true in production
-                SameSite = SameSiteMode.Lax, // Set to Lax to allow cross-site requests, Change to None/strict later
+                Secure = true,
+                SameSite = SameSiteMode.None, 
                 Expires = DateTimeOffset.UtcNow.AddDays(7)
             };
         }

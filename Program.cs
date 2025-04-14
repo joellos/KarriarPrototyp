@@ -41,7 +41,7 @@ namespace CC_Karriarpartner
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; // Remove later
+
             }).AddJwtBearer(options =>
             {
                 var token = builder.Configuration.GetValue<string>("Appsettings:Token");
@@ -60,6 +60,26 @@ namespace CC_Karriarpartner
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(token)),
                     ValidateIssuerSigningKey = true
                 };
+                options.Events = new JwtBearerEvents // this override to look for tookens in cookies
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["accessToken"];
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy
+                        .WithOrigins("LÄGG FRONTEND URL HÄR") 
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials(); // For cookies 
+                });
             });
 
             // Laddar ner native DinkToPdf och Registrerar den
@@ -173,7 +193,7 @@ namespace CC_Karriarpartner
             });
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowFrontend");
             app.UseAuthorization();
             app.UseRateLimiter();
             app.UseStaticFiles();
