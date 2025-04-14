@@ -52,7 +52,16 @@ namespace CC_Karriarpartner.Endpoints.LoginEndpoints
                 return Results.Ok(tokenResponse);
             }).RequireAuthorization()
             .WithTags("Login and Register");
+            // endpoint to logout
+            app.MapPost("/logout", (HttpContext context) =>
+            {
+                context.Response.Cookies.Delete("accessToken");
+                context.Response.Cookies.Delete("refreshToken");
 
+
+                return Results.Ok("Logged out successfully");
+
+            }).RequireAuthorization().WithTags("Login and Register");
         }
     }
 }
