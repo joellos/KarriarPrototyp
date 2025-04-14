@@ -7,8 +7,8 @@
             return new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false, // Set to true in production
-                SameSite = SameSiteMode.Lax, // Set to Lax to work on Swagger, Change to None/strict to work on React
+                Secure = true, 
+                SameSite = SameSiteMode.None,
                 Expires = DateTimeOffset.UtcNow.AddMinutes(10)
             };
         }
@@ -17,8 +17,8 @@
             return new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false, // Set to true in production
-                SameSite = SameSiteMode.Lax,  // Set to Lax to work on Swagger, Change to None/strict to work on React
+                Secure = true,
+                SameSite = SameSiteMode.None, 
                 Expires = DateTimeOffset.UtcNow.AddDays(7)
             };
         }
