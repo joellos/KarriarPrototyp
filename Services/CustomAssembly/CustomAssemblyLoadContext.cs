@@ -8,13 +8,13 @@ namespace CC_Karriarpartner.Services.CustomAssembly
     {
         public IntPtr LoadUnmanagedLibrary(string absolutePath)
         {
-            return LoadUnmanagedDll(absolutePath); 
+            return LoadUnmanagedDll(absolutePath);
         }
 
-        //protected override IntPtr LoadUnmanagedDll(string unmanagedDllPath)
-        //{
-        //    return LoadUnmanagedDllFromPath(unmanagedDllPath); 
-        //}
+        protected override IntPtr LoadUnmanagedDll(string unmanagedDllPath)
+        {
+            return LoadUnmanagedDllFromPath(unmanagedDllPath);
+        }
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
